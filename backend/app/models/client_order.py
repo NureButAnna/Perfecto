@@ -1,17 +1,17 @@
-import datetime
+from datetime import datetime
+from decimal import Decimal
 
 from sqlalchemy import String, Numeric, text, ForeignKey
-from sqlalchemy.testing.schema import mapped_column
-from src.database import Base
+from sqlalchemy.testing.schema import Mapped, mapped_column
+from app.database import Base
 
-class ClientOrderBase(Base):
+class ClientOrder(Base):
     __tablename__ = "client_order"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     status: Mapped[str] = mapped_column(String(50))
     total_cost:Mapped[Decimal] = mapped_column(Numeric(10, 2))
-    creation_date: Mapped[datetime.datetime] = mapped_column(
-        server_default=text("TIMEZONE('utc', now()"))
+    creation_date: Mapped[datetime] = mapped_column(default=datetime.utcnow)
 
     dry_cleaner_id: Mapped[int] = mapped_column(ForeignKey(
         "DryCleanerBase.id", ondelete="CASCADE"))

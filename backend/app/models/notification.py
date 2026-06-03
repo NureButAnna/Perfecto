@@ -1,6 +1,8 @@
+import datetime
+
 from sqlalchemy import String, ForeignKey, Text
-from sqlalchemy.testing.schema import mapped_column
-from src.database import Base
+from sqlalchemy.orm import Mapped, mapped_column
+from app.database import Base
 
 class Notification(Base):
     __tablename__ = "notification"

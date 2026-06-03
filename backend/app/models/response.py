@@ -2,7 +2,7 @@ from sqlalchemy import String, ForeignKey, Text
 from sqlalchemy.testing.schema import mapped_column
 from src.database import Base
 
-class ResponseBase(Base):
+class Response(Base):
     __tablename__ = "response"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)

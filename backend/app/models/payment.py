@@ -1,11 +1,12 @@
 import datetime
+from typing import Optional
 
-from sqlalchemy import String, ForeignKey, Text
+from sqlalchemy import String, ForeignKey, Text, text
 from sqlalchemy.orm import Mapped
 from sqlalchemy.testing.schema import mapped_column
 from app.database import Base
 
-class PaymnetBase(Base):
+class Paymnet(Base):
     __tablename__ = "payment"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)

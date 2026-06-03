@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+.header {
+  width: 100%;
+  background: #FFFFFF;
+  border-bottom: 2px solid black;
+  font-family: 'Futura PT', 'Futura', 'Trebuchet MS', Arial, sans-serif;
+}
+
+/* TOP HEADER */
+
+.topHeader {
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid black;
+
+  padding: 25px 50px;
+}
+
+/* LANGUAGE */
+
+.menuButton {
+  width: 45px;
+  height: 45px;
+
+  background-color: #FFECF0;
+  border: 2px solid black;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* SEARCH */
+
+.searchBox {
+  display: flex;
+  align-items: center;
+
+  border-bottom: 1.5px solid black;
+
+  width: 180px;
+}
+
+.searchBox input {
+  border: none;
+  background: transparent;
+  outline: none;
+
+  width: 100%;
+  padding: 5px;
+
+  font-size: 14px;
+}
+
+.searchBox button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+
+  font-size: 18px;
+}
+
+/* LOGO */
+
+.logo {
+    color: #C40060;
+    font-family: "Shantell Sans";
+    font-size: 48px;
+    font-weight: 500;
+    margin: 0;
+}
+
+/* PHONE */
+
+.phone {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* ICONS */
+
+.icons {
+  display: flex;
+  gap: 15px;
+
+  font-size: 28px;
+  cursor: pointer;
+}
+
+/* NAVBAR */
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+
+  padding: 18px 0;
+
+  background: #fff;
+}
+
+.text{
+  color: #D6D3D4;
+  font-size: 20px;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: black;
+
+  font-size: 18px;
+  transition: 0.2s;
+}
+
+.navbar a:hover {
+  color: #d1006f;
+}
