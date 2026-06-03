@@ -1,6 +1,9 @@
+from typing import Optional
+
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy import String, Numeric, ForeignKey
 from sqlalchemy.testing.schema import mapped_column
-from src.database import Base
+from app.database import Base
 
 class Employee(Base):
     __tablename__ = "employee"

@@ -1,13 +1,8 @@
-import datetime
+from decimal import Decimal
+from sqlalchemy import Numeric, ForeignKey, Integer
 
-from sqlalchemy import String, Numeric, text, ForeignKey
-from sqlalchemy.testing.schema import mapped_column
-# from app.database import Base
-#
-# class OrderServiceBase(Base):
-from sqlalchemy import String
-from sqlalchemy.testing.schema import mapped_column
-from src.database import Base
+from sqlalchemy.testing.schema import Mapped, mapped_column
+from app.database import Base
 
 class OrderService(Base):
     __tablename__ = "order_service"

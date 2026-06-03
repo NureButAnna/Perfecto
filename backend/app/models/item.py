@@ -1,8 +1,10 @@
-from sqlalchemy import String, ForeignKey, Text
-from sqlalchemy.testing.schema import mapped_column
-from src.database import Base
+from typing import Optional
 
-class ItemBase(Base):
+from sqlalchemy import String, ForeignKey, Text
+from sqlalchemy.orm import Mapped, mapped_column
+from app.database import Base
+
+class Item(Base):
     __tablename__ = "item"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)

@@ -9,7 +9,7 @@ from app.api.chat import router as chat_router
 
 app = FastAPI(
     title="Perfecto ✨",
-    description="Perfecto — Програмна система для управління "
+    description="Програмна система для управління "
                 "замовленнями та обслуговування клієнтів",
     version="1.0.0",
     docs_url="/api/docs"

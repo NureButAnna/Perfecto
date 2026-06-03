@@ -1,8 +1,11 @@
-from sqlalchemy import String
-from sqlalchemy.testing.schema import mapped_column
-from src.database import Base
+from typing import Optional
 
-class ClientBase(Base):
+from sqlalchemy import String
+from sqlalchemy.testing.schema import Mapped, mapped_column
+from app.database import Base
+
+
+class Client(Base):
     __tablename__ = "client"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
