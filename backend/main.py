@@ -1,11 +1,14 @@
 import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from starlette.staticfiles import StaticFiles
 
-from app.api.service import router as service_router
-from app.api.client import router as client_router
-from app.api.chat import router as chat_router
+from app.api.v1.endpoints.services import router as service_router
+from app.api.v1.endpoints.clients import router as client_router
+from app.api.v1.endpoints.chats import router as chat_router
+from app.api.v1.endpoints.orders import router as order_router
+from app.api.v1.endpoints.deliveries import router as delivery_router
+from app.api.v1.endpoints.dry_cleaners import router as dry_cleaner_router
+from app.api.v1.endpoints.categories import router as category_router
 
 app = FastAPI(
     title="Perfecto ✨",
@@ -23,16 +26,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount(
-    "/static",
-    StaticFiles(directory="static"),
-    name="static"
-)
-
 app.include_router(service_router)
 app.include_router(chat_router)
 app.include_router(client_router)
-
+app.include_router(order_router)
+app.include_router(delivery_router)
+app.include_router(dry_cleaner_router)
+app.include_router(category_router)
 
 @app.get("/")
 def root():
