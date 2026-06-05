@@ -15,6 +15,10 @@ class Settings(BaseSettings):
     azure_storage_connection_string: str
     azure_container_name: str
 
+    secret_key: str = Field(alias="SECRET_KEY")
+    algorithm: str = Field(alias="ALGORITHM")
+    access_token_expire_minutes: int = Field(alias="ACCESS_TOKEN_EXPIRE_MINUTES")
+
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore"
