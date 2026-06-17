@@ -3,9 +3,9 @@ from sqlalchemy.orm import Session
 from typing import Optional
 
 from app.database import get_db
-from app.repositories.image import ImageRepository
-from app.services.image import ImageService
-from app.schemas.image import ImageRead
+from app.repositories.images import ImageRepository
+from app.services.images import ImageService
+from app.schemas.images import ImageRead
 
 from app.dependencies import get_image_service
 
