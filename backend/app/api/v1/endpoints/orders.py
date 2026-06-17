@@ -40,7 +40,7 @@ def update_order_status(
     status: str,
     service: OrderService = Depends(get_order_service)
 ):
-    return service.update_order(order_id, OrderUpdate(status=status))
+    return service.update_order_status(order_id, status)
 
 
 @router.post("/",response_model=OrderCreate, status_code=status.HTTP_201_CREATED)

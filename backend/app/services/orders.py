@@ -90,6 +90,16 @@ class OrderService:
 
         return OrderRead.model_validate(updated)
 
+    def update_order_status(self, order_id: int, status: str):
+        order = self.repository.get_by_id(order_id)
+        if not order:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Order with id {order_id} not found"
+            )
+        updated = self.repository.update(order_id, {"status": status})
+        return OrderRead.model_validate(updated)
+
     def delete_order(self, order_id: int):
         deleted = self.repository.delete(order_id)
 
