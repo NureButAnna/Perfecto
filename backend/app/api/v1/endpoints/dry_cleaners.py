@@ -4,7 +4,7 @@ from app.schemas.dry_cleaner import DryCleanerCreate, DryCleanerRead, DryCleaner
 from app.services.dry_cleaners import DryCleanerService
 from app.dependencies import get_dry_cleaner_service, require_role
 
-from Perfecto.backend.app.models import User
+from app.models import User
 
 router = APIRouter(
 prefix="/dry_cleaners",
