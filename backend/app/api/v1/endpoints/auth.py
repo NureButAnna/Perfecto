@@ -8,7 +8,7 @@ from app.schemas.user import UserRegister, UserRead
 from app.services.users import UserService
 from app.security import create_access_token
 
-from .app.dependencies import get_user_service
+from app.dependencies import get_user_service
 
 router = APIRouter(
     prefix="/auth",
