@@ -26,8 +26,8 @@ class DeliveryService:
 
         return DeliveryRead.model_validate(delivery)
 
-    def get_employee_delivery(self, employee_id: int) -> List[DeliveryRead]:
-        deliveries = self.repository.get_by_employee_id(employee_id)
+    def get_employee_delivery(self, user_id: int) -> List[DeliveryRead]:
+        deliveries = self.repository.get_by_employee_id(user_id)
         return [DeliveryRead.model_validate(d) for d in deliveries]
 
     def get_delivery_by_order(self, order_id: int) -> List[DeliveryRead]:

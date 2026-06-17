@@ -21,6 +21,12 @@ def get_delivery(
 ):
     return service.get_delivery_by_id(delivery_id)
 
+@router.get("/employee/{user_id}", response_model=list[DeliveryRead])
+def get_employee_deliveries(
+    user_id: int,
+    service: DeliveryService = Depends(get_delivery_service)
+):
+    return service.get_employee_delivery(user_id)
 
 @router.post("/", response_model=DeliveryRead, status_code=status.HTTP_201_CREATED)
 def create_delivery(
