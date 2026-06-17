@@ -1,27 +1,26 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
 class Settings(BaseSettings):
-    REDIS_HOST: str
-    REDIS_KEY: str
+    redis_host: str
+    redis_key: str
 
-    DB_HOST: str
-    DB_PORT: int
-    DB_NAME: str
-    DB_USER: str
-    DB_PASSWORD: str
+    db_host: str
+    db_port: int
+    db_name: str
+    db_user: str
+    db_password: str
 
     azure_storage_connection_string: str
     azure_container_name: str
 
-    SECRET_KEY: str
-    ALGORITHM: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int
+    secret_key: str
+    algorithm: str = "HS256"
+    access_token_expire_minutes: int = 60
 
     model_config = SettingsConfigDict(
         env_file=".env",
-        extra="ignore"
+        extra="ignore",
+        case_sensitive=False
     )
-
 
 settings = Settings()
