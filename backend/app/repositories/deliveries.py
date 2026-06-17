@@ -7,14 +7,10 @@ from ..repositories.base import BaseRepository
 class DeliveryRepository(BaseRepository):
     model = Delivery
 
-    def get_by_employee_id(self, employee_id: int):
+    def get_by_employee_id(self, user_id: int):
         return (
             self.db.query(Delivery)
-            .filter(Delivery.employee_id == employee_id)
-            .options(
-                selectinload(Delivery.order),
-                selectinload(Delivery.employee)
-            )
+            .filter(Delivery.user_id == user_id)
             .all()
         )
 
