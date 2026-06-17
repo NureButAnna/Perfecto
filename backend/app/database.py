@@ -8,7 +8,7 @@ load_dotenv()
 DATABASE_URL = (
     f"postgresql+psycopg2://{os.getenv('DB_USER')}:"
     f"{os.getenv('DB_PASSWORD')}@"
-    f"{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/"
+    f"{os.getenv('DB_HOST')}:{os.getenv('DB_PORT', '5432')}/"
     f"{os.getenv('DB_NAME')}"
 )
 
