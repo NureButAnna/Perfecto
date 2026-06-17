@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from sqlalchemy import String, ForeignKey, Text, DateTime
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 
@@ -16,7 +16,9 @@ class Delivery(Base):
     flat_number: Mapped[Optional[str]] = mapped_column(String(20))
     delivery_datetime: Mapped[datetime] = mapped_column(DateTime, nullable=False)
 
-    employee_id: Mapped[int] = mapped_column(ForeignKey(
-        "employees.employee_id", ondelete="CASCADE"))
+    user_id: Mapped[int] = mapped_column(ForeignKey(
+        "users.user_id", ondelete="SET NULL"))
     order_id: Mapped[int] = mapped_column(ForeignKey(
         "orders.order_id", ondelete="CASCADE"))
+
+    users = relationship("User", back_populates="deliveries")

@@ -7,9 +7,9 @@ from sqlalchemy.testing.schema import mapped_column
 from app.database import Base
 
 class Paymnet(Base):
-    __tablename__ = "payment"
+    __tablename__ = "payments"
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    id: Mapped[int] = mapped_column("payment_id", primary_key=True, index=True)
     method: Mapped[str] = mapped_column(String(50))
     transaction_number: Mapped[str]= mapped_column(String(100))
     date: Mapped[datetime.datetime] = mapped_column(

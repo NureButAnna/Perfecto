@@ -28,10 +28,10 @@ class UserRead(UserBase):
 class UserUpdate(BaseModel):
     name: Optional[str] = None
     surname: Optional[str] = None
+    patronymic: Optional[str] = None
     email: Optional[EmailStr] = None
     phone_number: Optional[str] = Field(None, max_length=15)
     password: Optional[str] = Field(None, min_length=4)
-    role: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 

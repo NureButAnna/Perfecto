@@ -1,5 +1,3 @@
-from sqlalchemy.orm import Session, selectinload
-
 from app.models.dry_cleaner import DryCleaner
 from ..repositories.base import BaseRepository
 

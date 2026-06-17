@@ -3,10 +3,10 @@ from fastapi import APIRouter, Depends, UploadFile, File, Form, Header, HTTPExce
 from sqlalchemy.orm import Session
 
 from app.database import get_db
-from app.services.chat import analyze_chat_photo
+from app.services.chats import analyze_chat_photo
 from app.services.azure_ai import continue_conversation, get_openai_client
 from app.services.redis import get_chat_history, save_message, migrate_guest_history
-from app.repositories.chat import (
+from app.repositories.chats import (
     get_history_by_client,
     get_history_by_session,
     attach_session_to_client,

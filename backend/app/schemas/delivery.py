@@ -15,13 +15,13 @@ class DeliveryBase(BaseModel):
 
 
 class DeliveryCreate(DeliveryBase):
-    employee_id: int
+    user_id: int
     order_id: int
 
 
 class DeliveryRead(DeliveryBase):
     id: int
-    employee_id: int
+    user_id: Optional[int] = None
     order_id: int
 
     model_config = ConfigDict(from_attributes=True)
@@ -34,7 +34,7 @@ class DeliveryUpdate(BaseModel):
     flat_number: Optional[str] = None
     delivery_datetime: Optional[datetime] = None
     status: Optional[str] = None
-    employee_id: Optional[int] = None
+    user_id: Optional[int] = None
     order_id: Optional[int] = None
 
     model_config = ConfigDict(from_attributes=True)

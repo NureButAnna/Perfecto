@@ -7,6 +7,8 @@ from app.services.deliveries import DeliveryService
 from app.services.dry_cleaners import DryCleanerService
 from app.services.categories import CategoryService
 from app.services.users import UserService
+from app.services.services import ServService
+from app.services.items import ItemService
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 
@@ -24,6 +26,14 @@ def get_user_service(db=Depends(get_db)) -> UserService:
 
 def get_order_service(db=Depends(get_db)) -> OrderService:
     return OrderService(db)
+
+
+def get_item_service(db=Depends(get_db)) -> ItemService:
+    return ItemService(db)
+
+
+def get_serv_service(db=Depends(get_db)) -> ServService:
+    return ServService(db)
 
 
 def get_delivery_service(db=Depends(get_db)) -> DeliveryService:
