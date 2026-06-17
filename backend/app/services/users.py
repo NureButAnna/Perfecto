@@ -46,7 +46,12 @@ class UserService:
         return UserRead.model_validate(user)
 
     def update_user(self, user_id: int, user_data: UserUpdate) -> UserRead:
-        user = self.repository.update(user_id, user_data)
+        update_data = user_data.model_dump(exclude_unset=True)
+
+        if "password" in update_data:
+            update_data["password"] = get_password_hash(update_data["password"])
+
+        user = self.repository.update(user_id, update_data)
 
         if not user:
             raise HTTPException(
