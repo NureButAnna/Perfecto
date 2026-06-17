@@ -34,6 +34,14 @@ def update_order(
     service: OrderService = Depends(get_order_service),):
     return service.update_order(order_id, order_data)
 
+@router.patch("/{order_id}/status")
+def update_order_status(
+    order_id: int,
+    status: str,
+    service: OrderService = Depends(get_order_service)
+):
+    return service.update_order(order_id, OrderUpdate(status=status))
+
 
 @router.post("/",response_model=OrderCreate, status_code=status.HTTP_201_CREATED)
 def add_order(order_data: OrderCreate, service: OrderService = Depends(get_order_service)):
