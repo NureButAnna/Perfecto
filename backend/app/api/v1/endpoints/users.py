@@ -3,7 +3,7 @@ from typing import List
 
 from app.schemas.user import UserRead, UserRegister, UserUpdate, UserRole
 from app.services.users import UserService
-from app.dependencies import get_user_service
+from app.dependencies import get_user_service, require_role
 from sqlalchemy.orm import Session
 
 from app.database import get_db
@@ -17,13 +17,16 @@ router = APIRouter(
 )
 
 @router.get("/me", response_model=UserRead)
-def get_me(current_user: User = Depends(get_current_user)):
+def get_me(
+    current_user: User = Depends(get_current_user)
+):
     return current_user
 
 @router.get( "/role/{role}", response_model=List[UserRead])
 def get_users_by_role(
     role: str,
-    service: UserService = Depends(get_user_service)
+    service: UserService = Depends(get_user_service),
+    current_user: User = Depends(require_role("адміністратор"))
 ):
     return service.get_users_by_role(role)
 
@@ -31,7 +34,8 @@ def get_users_by_role(
 @router.get("/{user_id}", response_model=UserRead)
 def get_user(
     user_id: int,
-    service: UserService = Depends(get_user_service)
+    service: UserService = Depends(get_user_service),
+    current_user: User = Depends(require_role("адміністратор", "користувач", "кур'єр"))
 ):
     return service.get_user_by_id(user_id)
 
@@ -39,7 +43,8 @@ def get_user(
 @router.post("/",response_model=UserRead)
 def create_user(
     user_data: UserRegister,
-    service: UserService = Depends(get_user_service)
+    service: UserService = Depends(get_user_service),
+    current_user: User = Depends(require_role("адміністратор", "користувач", "кур'єр"))
 ):
 
     return service.create_user(user_data)
@@ -49,7 +54,8 @@ def create_user(
 def update_user(
     user_id: int,
     user_data: UserUpdate,
-    service: UserService = Depends(get_user_service)
+    service: UserService = Depends(get_user_service),
+    current_user: User = Depends(require_role("адміністратор", "користувач", "кур'єр"))
 ):
     return service.update_user(user_id, user_data)
 
@@ -57,7 +63,8 @@ def update_user(
 @router.delete("/{user_id}",status_code=status.HTTP_200_OK)
 def delete_user(
     user_id: int,
-    service: UserService = Depends(get_user_service)
+    service: UserService = Depends(get_user_service),
+    current_user: User = Depends(require_role("адміністратор"))
 ):
     return service.delete_user(user_id)
 
@@ -66,7 +73,8 @@ def delete_user(
 def update_role(
     user_id: int,
     role: UserRole,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role("адміністратор"))
 ):
     service = UserService(db)
     return service.change_user_role(user_id, role)

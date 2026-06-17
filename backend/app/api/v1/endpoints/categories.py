@@ -19,7 +19,8 @@ def get_categories(
 @router.post("/",response_model=CategoryRead,status_code=status.HTTP_201_CREATED)
 def add_category(
     category_data: CategoryCreate,
-    service: CategoryService = Depends(get_category_service)
+    service: CategoryService = Depends(get_category_service),
+    current_user: User = Depends(require_role("адміністратор"))
 ):
     return service.create_category(category_data)
 
@@ -28,7 +29,8 @@ def add_category(
 def update_category(
     category_id: int,
     category_data: CategoryUpdate,
-    service: CategoryService = Depends(get_category_service)
+    service: CategoryService = Depends(get_category_service),
+    current_user: User = Depends(require_role("адміністратор"))
 ):
     return service.update_category(category_id, category_data)
 
@@ -36,6 +38,7 @@ def update_category(
 @router.delete("/{category_id}", status_code=status.HTTP_200_OK)
 def delete_category(
     category_id: int,
-    service: CategoryService = Depends(get_category_service)
+    service: CategoryService = Depends(get_category_service),
+    current_user: User = Depends(require_role("адміністратор"))
 ):
     return service.delete_category(category_id)

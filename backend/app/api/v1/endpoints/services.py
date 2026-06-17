@@ -1,9 +1,12 @@
 from fastapi import APIRouter, Depends, status, UploadFile, File, Form
 from typing import List
 
+from app.models import User
 from app.services.services import ServService
 from app.schemas.service import ServiceRead, ServiceCreate, ServiceUpdate
-from app.dependencies import get_serv_service
+from app.dependencies import get_serv_service, require_role
+
+
 
 router = APIRouter(
     prefix="/services",
@@ -34,7 +37,8 @@ def get_service_by_price(
 @router.post("/", response_model=ServiceCreate)
 def create_service(
     service_data: ServiceCreate,
-    service: ServService = Depends(get_serv_service)
+    service: ServService = Depends(get_serv_service),
+    current_user: User = Depends(require_role("адміністратор"))
 ):
     return service.create_service(service_data)
 
@@ -43,7 +47,8 @@ def create_service(
 def update_service(
     service_id: int,
     service_data: ServiceUpdate,
-    service: ServService = Depends(get_serv_service)
+    service: ServService = Depends(get_serv_service),
+    current_user: User = Depends(require_role("адміністратор"))
 ):
     return service.update_service(service_data)
 
@@ -51,9 +56,12 @@ def update_service(
 @router.delete("/{service_id}", status_code=status.HTTP_200_OK)
 def delete_service(
     service_id: int,
-    service: ServService = Depends(get_serv_service)
+    service: ServService = Depends(get_serv_service),
+    current_user: User = Depends(require_role("адміністратор"))
 ):
     return service.delete_service(service_id)
+
+
 
 # @router.post("/services/{service_id}/images")
 # async def upload_service_image(
