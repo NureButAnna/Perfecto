@@ -2,7 +2,7 @@ from typing import Optional
 from fastapi import UploadFile, HTTPException
 from fastapi.concurrency import run_in_threadpool
 
-from app.repositories.image import ImageRepository
+from app.repositories.images import ImageRepository
 from app.schemas.image import ImageCreate
 from app.services.blob_storage import AzureBlobService
 from app.models.image import Image

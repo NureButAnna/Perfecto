@@ -7,9 +7,9 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
 class Image(Base):
-    __tablename__ = "image"
+    __tablename__ = "images"
 
-    image_id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    id: Mapped[int] = mapped_column("image_id", primary_key=True, index=True)
     link: Mapped[str] = mapped_column(Text)
     description: Mapped[Optional[str]] = mapped_column(Text)
     date: Mapped[datetime.datetime] = mapped_column(
@@ -18,16 +18,16 @@ class Image(Base):
     )
 
     chat_id: Mapped[int] = mapped_column(ForeignKey(
-        "chat.chat_id", ondelete="CASCADE"),
+        "chats.chat_id", ondelete="CASCADE"),
         nullable= True
     )
     response_id: Mapped[int] = mapped_column(ForeignKey(
-        "response.response_id", ondelete="CASCADE"),
+        "responses.response_id", ondelete="CASCADE"),
         nullable= True
     )
     service_id: Mapped[int] = mapped_column(ForeignKey(
-        "service.service_id", ondelete="CASCADE"),
+        "services.service_id", ondelete="CASCADE"),
         nullable= True
     )
 
-    service = relationship("Service",back_populates="images")
+    service = relationship("Service",back_populates="image")
