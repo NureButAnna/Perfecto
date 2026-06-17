@@ -5,8 +5,6 @@ from app.services.dry_cleaners import DryCleanerService
 from app.dependencies import get_dry_cleaner_service
 
 router = APIRouter(
-    prefix="/dry_cleaners",
-    tags=["Dry Cleaners 🫧"]
 )
 
 @router.get("/", response_model=list[DryCleanerRead])
