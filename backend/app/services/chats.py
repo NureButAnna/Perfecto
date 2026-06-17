@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
-from app.repositories.chat import create_chat
-from app.repositories.image import ImageRepository
+from app.repositories.chats import create_chat
+from app.repositories.images import ImageRepository
 from app.schemas.image import ImageCreate
 from app.services.redis import save_message
 from app.services.azure_ai import analyze_image

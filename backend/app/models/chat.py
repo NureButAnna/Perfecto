@@ -7,9 +7,9 @@ from sqlalchemy import String, ForeignKey, Text, Integer, text
 from app.database import Base
 
 class AIChat(Base):
-    __tablename__ = "chat"
+    __tablename__ = "chats"
 
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
+    id: Mapped[int] = mapped_column("chat_id", primary_key=True, index=True)
     message: Mapped[Optional[str]] = mapped_column(Text)
     date:  Mapped[datetime.datetime] = mapped_column(
         server_default=text("TIMEZONE('utc', now())")
