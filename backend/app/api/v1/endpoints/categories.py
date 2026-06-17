@@ -1,8 +1,11 @@
 from fastapi import APIRouter, Depends, status
 
+from app.models import User
 from app.schemas.category import CategoryRead, CategoryUpdate, CategoryCreate
 from app.services.categories import CategoryService
-from app.dependencies import get_category_service
+from app.dependencies import get_category_service, require_role
+
+
 
 router = APIRouter(
     prefix="/categories",
