@@ -10,7 +10,7 @@ router = APIRouter(
 )
 
 @router.get("/", response_model=list[DeliveryRead])
-def get_deliveries(service: DeliveryService = Depends(get_delivery_service),):
+def get_deliveries(service: DeliveryService = Depends(get_delivery_service)):
     return service.get_all_deliveries()
 
 

@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm import selectinload
 
 from app.models.delivery import Delivery
 from ..repositories.base import BaseRepository
