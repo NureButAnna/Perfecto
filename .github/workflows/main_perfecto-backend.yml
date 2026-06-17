@@ -24,7 +24,7 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Create and start virtual environment and install dependencies
+      - name: Install dependencies
         run: |
           python -m venv antenv
           source antenv/bin/activate
@@ -35,8 +35,8 @@ jobs:
         with:
           name: python-app
           path: |
-            .
-            !antenv/
+            backend/
+            !backend/antenv/
 
   deploy:
     runs-on: ubuntu-latest
@@ -64,5 +64,5 @@ jobs:
         with:
           app-name: 'perfecto-backend'
           slot-name: 'Production'
-          package: './backend'
+          package: '.'
           startup-command: 'gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:8000'
