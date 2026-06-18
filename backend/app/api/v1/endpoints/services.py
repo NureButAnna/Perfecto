@@ -33,6 +33,12 @@ def get_service_by_price(
 ):
     return service.get_service_by_price(service_id)
 
+@router.get("/category/{category_id}", response_model=list[ServiceRead],)
+def get_service_by_category(
+    category_id: int,
+    service: ServService = Depends(get_serv_service)
+):
+    return service.get_service_by_category(category_id)
 
 @router.post("/", response_model=ServiceCreate)
 def create_service(
