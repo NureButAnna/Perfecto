@@ -18,6 +18,13 @@ def get_categories(
 ):
     return service.get_all_categories()
 
+@router.get("/{category_id}", response_model=CategoryRead)
+def get_category_by_id(
+    category_id: int,
+    service: CategoryService = Depends(get_category_service)
+):
+    return service.get_category_by_id(category_id)
+
 
 @router.post("/",response_model=CategoryRead,status_code=status.HTTP_201_CREATED)
 def add_category(
