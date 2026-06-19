@@ -1,7 +1,8 @@
 from datetime import datetime
 from decimal import Decimal
+from typing import Optional
 
-from sqlalchemy import String, Numeric, ForeignKey
+from sqlalchemy import String, Numeric, ForeignKey, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.database import Base
 
@@ -12,6 +13,8 @@ class Order(Base):
     status: Mapped[str] = mapped_column(String(50))
     total_cost:Mapped[Decimal] = mapped_column(Numeric(10, 2))
     creation_date: Mapped[datetime] = mapped_column(default=datetime.utcnow)
+    payment_method: Mapped[str] = mapped_column(String(30))
+    comment: Mapped[Optional[str]] = mapped_column(Text)
 
     user_id: Mapped[int] = mapped_column(ForeignKey(
         "users.user_id", ondelete="CASCADE"))
