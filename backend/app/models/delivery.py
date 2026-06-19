@@ -15,6 +15,8 @@ class Delivery(Base):
     house_number: Mapped[str] = mapped_column(String(20))
     flat_number: Mapped[Optional[str]] = mapped_column(String(20))
     delivery_datetime: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    delivery_type : Mapped[str] = mapped_column(String(30))
+    nova_poshta_branch: Mapped[str] = mapped_column(String(100))
 
     user_id: Mapped[int] = mapped_column(ForeignKey(
         "users.user_id", ondelete="SET NULL"))
