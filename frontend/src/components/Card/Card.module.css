@@ -1,110 +1,86 @@
 .card {
   background: #fff;
   border-radius: 16px;
+  border: 0.5px solid rgba(0,0,0,0.08);
   overflow: hidden;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: box-shadow 0.2s, transform 0.2s;
+  transition: border-color 0.2s, transform 0.2s;
 }
-
 .card:hover {
-  box-shadow: 0 8px 28px rgba(238,36,130,0.12);
-  transform: translateY(-4px);
+  border-color: rgba(212,83,126,0.3);
+  transform: translateY(-3px);
 }
 
-/* ── Зображення ── */
 .imageWrap {
   width: 100%;
-  height: 200px;
+  height: 190px;
   overflow: hidden;
-  background: #f5e8ec;
+  background: #F9F9F7;
   flex-shrink: 0;
-}
-
-.image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s;
-}
-
-.card:hover .image {
-  transform: scale(1.04);
-}
-
-.imagePlaceholder {
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 48px;
 }
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s;
+}
+.card:hover .image { transform: scale(1.03); }
+.imagePlaceholder { font-size: 40px; color: #ccc; }
 
-/* ── Тіло ── */
 .body {
-  padding: 16px 18px 20px;
+  padding: 14px 16px 18px;
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 8px;
+  gap: 6px;
 }
 
 .name {
-  font-size: 15px;
-  font-weight: 700;
-  color: #1a1a1a;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2C2C2A;
   margin: 0;
   line-height: 1.4;
-
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-/* ── Рейтинг ── */
-.rating {
-  display: flex;
-  gap: 2px;
-}
+.rating { display: flex; gap: 2px; }
+.star { color: var(--pink); font-size: 13px; }
 
-.star {
-  color: #ee2482;
-  font-size: 14px;
-}
-
-/* ── Ціна ── */
 .price {
-  font-size: 16px;
-  font-weight: 700;
-  color: #ee2482;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--pink);
   margin: 0;
   margin-top: auto;
 }
 
-/* ── Кнопка ── */
 .btn {
   width: 100%;
-  padding: 11px;
-  border: none;
+  padding: 10px;
+  border: 1.5px solid var(--pink);
   border-radius: 10px;
-  background: #ee2482;
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
+  background: transparent;
+  color: var(--pink);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.18s;
-  margin-top: 4px;
+  transition: all 0.18s;
+  margin-top: 6px;
 }
-
-.btn:hover { background: #d41e74; }
+.btn:hover { background: var(--pink); color: #fff; }
 
 .btnAdded {
-  background: #eafaf1;
-  color: #27ae60;
+  background: #E1F5EE;
+  border-color: #1D9E75;
+  color: #0F6E56;
 }
-
-.btnAdded:hover { background: #d5f5e3; }
+.btnAdded:hover { background: #1D9E75; color: #fff; }

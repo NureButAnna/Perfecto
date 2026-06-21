@@ -48,6 +48,7 @@ export default function Card(props) {
       )
     );
 
+  console.log(finalImage);
   return (
     <div className={styles.card}>
 
