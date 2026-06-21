@@ -1,0 +1,22 @@
+:root {
+  --pink:       #EC407A;
+  --pink-dark:  #C40060;
+  --pink-light: #FFECF0;
+  --teal-light: #ADFFF5;
+  --teal:       #00DFD0;
+  --teal-dark:  #003F3A;
+  --gray-50:    #F9F9F9;
+  --gray-100:   #F0F0F0;
+  --gray-200:   #E0E0E0;
+  --gray-600:   #757575;
+  --gray-800:   #2C2C2C;
+  --white:      #FFFFFF;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  --container: 1200px;
+  --font-body: 'Futura PT', 'Futura', 'Trebuchet MS', Arial, sans-serif; 
+}
