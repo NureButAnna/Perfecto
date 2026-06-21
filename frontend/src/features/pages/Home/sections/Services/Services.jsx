@@ -14,11 +14,6 @@ export default function ServicesSection() {
             </div>
           ))}
         </div>
-        <div className={styles.servicesBtnRow}>
-          <button className={styles.btnPrimary}>
-            Переглянути всі послуги ↓
-          </button>
-        </div>
       </div>
     </section>
   );

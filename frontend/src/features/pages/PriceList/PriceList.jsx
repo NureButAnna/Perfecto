@@ -63,6 +63,16 @@ export default function PriceList() {
     ];
   });
 };
+
+  const increaseQty = (id) =>
+    setCart((prev) =>
+      prev.map((c) => c.serviceId === id ? { ...c, qty: c.qty + 1 } : c)
+    );
+
+  const decreaseQty = (id) =>
+    setCart((prev) =>
+      prev.map((c) => c.serviceId === id ? { ...c, qty: Math.max(1, c.qty - 1) } : c)
+    );
  
   const removeFromCart = (id) =>
   setCart((prev) => prev.filter((c) => c.serviceId !== id));
@@ -162,12 +172,12 @@ export default function PriceList() {
                         </span>
                       </div>
  
-                      <div className="qty-control">
-                        <button className="qty-btn" onClick={() => removeFromCart(item.serviceId)}>
+                     <div className="qty-control">
+                        <button className="qty-btn" onClick={() => decreaseQty(item.serviceId)}>
                           <MinusIcon />
                         </button>
                         <span className="qty-num">{item.qty}</span>
-                        <button className="qty-btn" onClick={() => removeFromCart(item.serviceId)}>
+                        <button className="qty-btn" onClick={() => increaseQty(item.serviceId)}>
                           <PlusIcon />
                         </button>
                       </div>

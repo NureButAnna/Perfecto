@@ -1,21 +1,14 @@
-.about {
-  background: var(--pink-light);
-  padding: 80px 0;
-}
+.about { background: #FBEAF0; padding: 80px 0; }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
 
 .sectionTitle {
-  font-size: clamp(24px, 3vw, 36px);
-  font-weight: 700;
-  color: var(--gray-800);
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 500;
+  color: #2C2C2A;
   text-align: center;
   margin-bottom: 32px;
-  font-family: "Shantell Sans";
+  font-family: "Shantell Sans", cursive;
 }
 
 .aboutGrid {
@@ -26,26 +19,22 @@
 }
 
 .aboutCols p {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.7;
-  color: var(--gray-800);
-  margin-bottom: 16px;
+  color: #5F5E5A;
+  margin-bottom: 14px;
 }
+.aboutCols p:last-child { margin-bottom: 0; }
 
-.aboutCols p:last-child {
-  margin-bottom: 0;
+.aboutImgFrame {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 0.5px solid rgba(0,0,0,0.1);
 }
 
 .aboutImgWrap {
-  border-radius: var(--radius-lg);
+  border-radius: 16px;
   overflow: hidden;
-  border: 10px solid var(--teal);
-}
-
-.aboutImgFrame {
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: 10px solid var(----gray-800);
 }
 
 .aboutImg {
@@ -56,7 +45,6 @@
 }
 
 @media (max-width: 768px) {
-  .aboutGrid {
-    grid-template-columns: 1fr;
-  }
+  .container { padding: 0 20px; }
+  .aboutGrid { grid-template-columns: 1fr; }
 }
