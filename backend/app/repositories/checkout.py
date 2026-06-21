@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from app.models.order import Order
-from app.models.order_services import OrderServices
+from app.models.order_service import OrderServices
 from app.models.delivery import Delivery
 
 
@@ -17,7 +17,7 @@ class CheckoutRepository:
                         total_cost):
 
         order = Order(
-            status="Нове",
+            status="new",
             total_cost=total_cost,
             payment_method=order_data.payment_method,
             comment=order_data.comment,
@@ -32,9 +32,9 @@ class CheckoutRepository:
             order_service = OrderServices(
                 order_id=order.id,
                 service_id=item.service_id,
-                quantity=item.quantity
+                number=item.number,
+                price=item.price,
             )
-
             self.session.add(order_service)
 
         delivery = Delivery(
@@ -50,8 +50,15 @@ class CheckoutRepository:
         )
 
         self.session.add(delivery)
-
         self.session.commit()
         self.session.refresh(order)
+        self.session.refresh(delivery)
 
-        return order
+        return {
+            "order_id":       order.id,
+            "status":         order.status,
+            "total_cost":     order.total_cost,
+            "creation_date":  order.creation_date,
+            "order_services": order.order_services,
+            "delivery":       delivery,
+        }

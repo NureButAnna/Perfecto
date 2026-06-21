@@ -9,7 +9,6 @@ router = APIRouter(
     tags=["Checkout 🏷️"]
 )
 
-
 @router.post(
     "/",
     response_model=CheckoutRead,
