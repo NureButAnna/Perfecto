@@ -1,41 +1,39 @@
-/* src/components/Auth/AuthModal.module.css */
-
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0,0,0,0.4);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  font-family: 'Futura PT', 'Futura', 'Trebuchet MS', Arial, sans-serif;
 }
 
 .modal {
-  width: 360px;
+  width: 380px;
   max-height: 90vh;
   overflow-y: auto;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+  border: 0.5px solid rgba(0,0,0,0.08);
 }
 
-/* ── Шапка ── */
 .header {
-  background: #f5e8ec;
+  background: #FBEAF0;
   padding: 20px 24px;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  border-bottom: 1px solid #e8d0d8;
+  border-bottom: 0.5px solid rgba(0,0,0,0.06);
   border-radius: 16px 16px 0 0;
 }
 
 .header h2 {
   margin: 0;
-  font-size: 22px;
-  font-weight: 700;
-  color: #2d2d2d;
+  font-size: 20px;
+  font-weight: 500;
+  color: #2C2C2A;
 }
 
 .closeBtn {
@@ -46,19 +44,18 @@
   border: none;
   background: none;
   cursor: pointer;
-  font-size: 20px;
-  color: #888;
+  font-size: 18px;
+  color: #888780;
   line-height: 1;
+  transition: color 0.15s;
 }
+.closeBtn:hover { color: #2C2C2A; }
 
-.closeBtn:hover { color: #333; }
-
-/* ── Форма ── */
 .form {
-  padding: 24px;
+  padding: 20px 24px 24px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .field {
@@ -68,24 +65,26 @@
 }
 
 .field label {
-  font-size: 13px;
-  font-weight: 600;
-  color: #444;
+  font-size: 11px;
+  font-weight: 500;
+  color: #5F5E5A;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 .field input {
-  height: 42px;
-  border: 1.5px solid #ddd;
+  height: 40px;
+  border: 0.5px solid rgba(0,0,0,0.15);
   border-radius: 8px;
   padding: 0 12px;
   font-size: 14px;
-  transition: border-color 0.18s;
   outline: none;
+  transition: border-color 0.15s;
+  font-family: inherit;
+  color: #2C2C2A;
 }
-
-.field input:focus {
-  border-color: #ee2482;
-}
+.field input:focus { border-color: #D4537E; }
+.field input::placeholder { color: #888780; }
 
 .row2 {
   display: grid;
@@ -93,37 +92,32 @@
   gap: 12px;
 }
 
-.hint {
-  font-size: 11px;
-  color: #999;
-}
+.hint { font-size: 11px; color: #888780; }
 
-/* ── Помилка ── */
 .error {
   font-size: 13px;
-  color: #d9534f;
-  background: #fff5f5;
-  border: 1px solid #f5c6c6;
-  border-radius: 6px;
+  color: #A32D2D;
+  background: #FCEBEB;
+  border: 0.5px solid #F7C1C1;
+  border-radius: 8px;
   padding: 8px 12px;
   margin: 0;
 }
 
-/* ── Кнопки ── */
 .submitBtn {
-  height: 46px;
+  height: 42px;
   border: none;
   border-radius: 10px;
-  background: #ee2482;
+  background: #2C2C2A;
   color: #fff;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.18s;
+  transition: background 0.15s;
+  font-family: inherit;
 }
-
-.submitBtn:hover:not(:disabled) { background: #d41e74; }
-.submitBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+.submitBtn:hover:not(:disabled) { background: #D4537E; }
+.submitBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .switchRow {
   display: flex;
@@ -131,17 +125,17 @@
   align-items: center;
   gap: 6px;
   font-size: 13px;
-  color: #666;
+  color: #888780;
 }
 
 .switchBtn {
   background: none;
   border: none;
-  color: #ee2482;
+  color: #D4537E;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   padding: 0;
+  font-family: inherit;
 }
-
 .switchBtn:hover { text-decoration: underline; }
