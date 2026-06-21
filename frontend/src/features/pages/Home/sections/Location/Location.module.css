@@ -1,0 +1,234 @@
+.location {
+  background: var(--white);
+  padding: 80px 0 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.title {
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 700;
+  color: var(--gray-800);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  text-align: center;
+  color: var(--gray-600);
+  font-size: 15px;
+  margin-bottom: 28px;
+}
+
+.controls {
+  margin-bottom: 24px;
+}
+
+.cityTabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.cityTab {
+  padding: 8px 18px;
+  border-radius: 20px;
+  border: 1.5px solid var(--gray-200);
+  background: var(--white);
+  color: var(--gray-600);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+}
+
+.cityTab:hover {
+  border-color: var(--pink);
+  color: var(--pink);
+}
+
+.cityTabActive {
+  background: var(--pink);
+  color: var(--white);
+  border-color: var(--pink);
+}
+
+.mapLayout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+  height: 440px;
+}
+
+.branchList {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--gray-200) transparent;
+}
+
+.branchCard {
+  display: flex;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--gray-100);
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: var(--white);
+}
+
+.branchCard:hover,
+.branchCardActive {
+  border-color: var(--pink);
+  background: var(--pink-light);
+}
+
+.branchDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--pink);
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.branchInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.branchName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.branchAddress {
+  font-size: 12px;
+  color: var(--gray-600);
+}
+
+.branchHours {
+  font-size: 11px;
+  color: var(--gray-600);
+}
+
+.branchPhone {
+  font-size: 12px;
+  color: var(--pink);
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.branchPhone:hover {
+  text-decoration: underline;
+}
+
+.mapWrap {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--gray-100);
+  position: relative;
+}
+
+.map {
+  width: 100%;
+  height: 100%;
+}
+
+.mapLoading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-50);
+  color: var(--gray-600);
+  font-size: 14px;
+}
+
+.infoWindow {
+  padding: 4px 2px;
+  min-width: 180px;
+}
+
+.infoName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gray-800);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.infoAddress,
+.infoHours {
+  font-size: 12px;
+  color: var(--gray-600);
+  margin: 0 0 3px;
+}
+
+.infoPhone {
+  font-size: 13px;
+  color: var(--pink);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.cta {
+  background: var(--teal);
+  margin-top: 48px;
+  padding: 32px 0;
+}
+
+.ctaInner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.ctaText {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.ctaText strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .mapLayout {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .branchList {
+    max-height: 200px;
+  }
+
+  .mapWrap {
+    height: 300px;
+  }
+
+  .ctaInner {
+    flex-direction: column;
+    text-align: center;
+  }
+}

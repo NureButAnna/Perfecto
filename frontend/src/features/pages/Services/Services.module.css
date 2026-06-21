@@ -8,3 +8,20 @@ section{
   font-family: 'Futura PT', 'Futura', 'Trebuchet MS', Arial, sans-serif; 
   padding: 25px 50px;
 }
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  background: white;
+}
+
+.item {
+  display: block;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: black;
+}
+
+.item:hover {
+  background: #f2f2f2;
+}

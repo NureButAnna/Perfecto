@@ -4,11 +4,11 @@
   display: flex;
   justify-content: center;
   padding: 40px 20px;
-  font-family: Arial, sans-serif;
+  font-family: 'Futura PT', 'Futura', 'Trebuchet MS', Arial, sans-serif; 
   position: relative;
 }
 
-/* легкі вертикальні смуги як на макеті */
+
 .page::before {
   content: "";
   position: absolute;
@@ -40,7 +40,6 @@
   margin-bottom: 25px;
 }
 
-/* STEPS */
 .steps {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -49,18 +48,30 @@
 }
 
 .card {
-  border: 2px solid #ff4d6d;
-  border-radius: 12px;
-  padding: 15px;
-  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 12px;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--pink);
+  cursor: pointer;
+  transition: border-color 0.18s, transform 0.15s;
+  text-align: center;
 }
+
+.card:hover {
+  border-color: var(--teal);
+  transform: translateY(-2px);
+}
+
 
 .card h2 {
   color: #ff4d6d;
   margin: 0;
 }
 
-/* UPLOAD */
 .upload {
   border: 2px dashed #ff4d6d;
   border-radius: 14px;
@@ -93,7 +104,6 @@
   object-fit: cover;
 }
 
-/* TEXTAREA */
 .textarea {
   width: 100%;
   min-height: 90px;
@@ -104,11 +114,10 @@
   resize: none;
 }
 
-/* BUTTON */
 .button {
   width: 100%;
   padding: 14px;
-  background: #00c2b8;
+  background: var(--teal);
   border: none;
   border-radius: 10px;
   color: white;
@@ -119,4 +128,5 @@
 
 .button:hover {
   opacity: 0.9;
+  background: var(--teal-dark);
 }

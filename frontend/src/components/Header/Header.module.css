@@ -123,3 +123,143 @@
 .navbar a:hover {
   color: #d1006f;
 }
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.navLink {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+
+  background: white;
+  min-width: 220px;
+
+  display: flex;
+  flex-direction: column;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  border-radius: 10px;
+
+  z-index: 1000;
+}
+
+.cartWrapper {
+  position: relative;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cartDropdown {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  width: 260px;
+  background: white;
+  border: 1px solid #ddd;
+  padding: 10px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.cartItem {
+  padding: 6px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.avatarBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #ee2482;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s;
+}
+
+.avatarBtn:hover { background: #d41e74; }
+
+/* ── Дропдаун юзера ── */
+.userMenu {
+  position: relative;
+}
+
+.userDropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  min-width: 200px;
+  padding: 12px 0;
+  z-index: 500;
+}
+
+.userDropdownName {
+  padding: 4px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.userDropdownEmail {
+  padding: 0 16px 8px;
+  font-size: 12px;
+  color: #888;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #f0f0f0;
+  margin: 4px 0;
+}
+
+.userDropdownItem {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 14px;
+  color: #333;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.userDropdownItem:hover { background: #fafafa; }
+
+.userDropdownLogout { color: #d9534f; }
+.userDropdownLogout:hover { background: #fff5f5; }

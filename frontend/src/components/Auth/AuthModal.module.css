@@ -1,0 +1,147 @@
+/* src/components/Auth/AuthModal.module.css */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  width: 360px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+}
+
+/* ── Шапка ── */
+.header {
+  background: #f5e8ec;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  border-bottom: 1px solid #e8d0d8;
+  border-radius: 16px 16px 0 0;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #2d2d2d;
+}
+
+.closeBtn {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: #888;
+  line-height: 1;
+}
+
+.closeBtn:hover { color: #333; }
+
+/* ── Форма ── */
+.form {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+}
+
+.field input {
+  height: 42px;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  padding: 0 12px;
+  font-size: 14px;
+  transition: border-color 0.18s;
+  outline: none;
+}
+
+.field input:focus {
+  border-color: #ee2482;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.hint {
+  font-size: 11px;
+  color: #999;
+}
+
+/* ── Помилка ── */
+.error {
+  font-size: 13px;
+  color: #d9534f;
+  background: #fff5f5;
+  border: 1px solid #f5c6c6;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin: 0;
+}
+
+/* ── Кнопки ── */
+.submitBtn {
+  height: 46px;
+  border: none;
+  border-radius: 10px;
+  background: #ee2482;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.submitBtn:hover:not(:disabled) { background: #d41e74; }
+.submitBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.switchRow {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #666;
+}
+
+.switchBtn {
+  background: none;
+  border: none;
+  color: #ee2482;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.switchBtn:hover { text-decoration: underline; }
