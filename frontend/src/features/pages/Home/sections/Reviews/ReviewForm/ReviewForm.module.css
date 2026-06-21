@@ -1,0 +1,152 @@
+.reviews {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  width: 700px;
+  max-width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 20px;
+  padding: 30px;
+  position: relative;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 0 16px;
+  border-bottom: 1px solid #f0d0dc;
+}
+
+.modalHeader h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: #f9e7ed;
+  border-bottom: 1px solid #ddd;
+}
+
+.ratingSection {
+  padding: 24px;
+}
+
+.stars {
+  display: flex;
+  gap: 25px;
+  margin-top: 15px;
+}
+
+.star,
+.activeStar {
+  font-size: 40px;
+  cursor: pointer;
+}
+
+.star {
+  color: #ddd;
+}
+
+.activeStar {
+  color: #ff2f92;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 24px 24px;
+}
+
+.inputGroup textarea {
+  min-height: 120px;
+  resize: none;
+}
+
+.inputGroup input,
+.inputGroup textarea {
+  padding: 12px;
+  border: 1px solid #999;
+  outline: none;
+}
+
+.upload {
+  padding: 0 24px 24px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.buttons {
+  display: flex;
+  gap: 20px;
+  padding: 24px;
+}
+
+.cancelBtn {
+  flex: 1;
+  padding: 14px;
+  border: 1px solid #555;
+  background: white;
+  cursor: pointer;
+}
+
+.submitBtn {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  background: #ff2f92;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.inputGroup select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #999;
+  outline: none;
+  background: white;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.inputGroup select:focus {
+  border-color: #ff2f92;
+}
