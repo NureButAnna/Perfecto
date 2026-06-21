@@ -10,43 +10,48 @@ export default function CategoryPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
-      fetch(`http://127.0.0.1:8000/categories/${id}`)
+    fetch(`http://127.0.0.1:8000/categories/${id}`)
       .then(res => res.json())
       .then(data => setCategory(data))
-      .catch(err => console.error("Category error:", err))
+      .catch(err => console.error("Category error:", err));
 
     fetch(`http://127.0.0.1:8000/services/category/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setServices(data);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      })
+      .then(res => res.json())
+      .then(data => setServices(data))
+      .catch(err => console.error("Error:", err))
       .finally(() => setLoading(false));
   }, [id]);
 
   return (
-    <section>
-      <h1>
-        {category ? category.name : "Завантаження категорії..."}
-      </h1>
-
-      {loading && <p>Завантаження...</p>}
-
-      <div className={styles.cardsWrapper}>
-        {services.map((service) => (
-          <Card
-            key={service.id}
-            id={service.id}
-            imageUrl={service.image_url}
-            name={service.name}
-            price={service.price}
-            rating={service.rating}
-          />
-        ))}
+    <div className={styles.page}>
+      <div className={styles.pageHeader}>
+        <h1>{category ? category.name : "Завантаження..."}</h1>
+        {!loading && (
+          <p>{services.length} {services.length === 1 ? "послуга" : "послуг"}</p>
+        )}
       </div>
-    </section>
+
+      {loading ? (
+        <div className={styles.loader}>
+          <div className={styles.spinner} />
+          Завантаження послуг…
+        </div>
+      ) : services.length === 0 ? (
+        <div className={styles.empty}>Послуги не знайдено</div>
+      ) : (
+        <div className={styles.cardsWrapper}>
+          {services.map((service) => (
+            <Card
+              key={service.id}
+              id={service.id}
+              imageUrl={service.image?.link}
+              name={service.name}
+              price={service.price}
+              rating={service.rating}
+            />
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
