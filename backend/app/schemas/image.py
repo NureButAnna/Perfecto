@@ -10,7 +10,7 @@ class ImageBase(BaseModel):
 
     service_id: Optional[int] = None
     chat_id: Optional[int] = None
-    response_id: Optional[int] = None
+    review_id: Optional[int] = None
 
 
 class ImageCreate(ImageBase):
