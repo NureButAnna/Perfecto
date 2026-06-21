@@ -13,7 +13,7 @@ class Order(Base):
     status: Mapped[str] = mapped_column(String(50))
     total_cost:Mapped[Decimal] = mapped_column(Numeric(10, 2))
     creation_date: Mapped[datetime] = mapped_column(default=datetime.utcnow)
-    payment_method: Mapped[str] = mapped_column(String(30))
+    payment_method: Mapped[Optional[str]] = mapped_column(String(30))
     comment: Mapped[Optional[str]] = mapped_column(Text)
 
     user_id: Mapped[int] = mapped_column(ForeignKey(
