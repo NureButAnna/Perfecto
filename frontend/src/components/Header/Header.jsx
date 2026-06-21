@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import styles from "./Header.module.css";
 import LoginModal from "../Auth/LoginModule";
 import RegisterModal from "../Auth/RegisterModule";
-import { IoSearch, IoCartOutline } from "react-icons/io5";
+import { IoSearch, IoCartOutline, IoMenuOutline, IoCloseOutline } from "react-icons/io5";
 import { FaRegUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useServices } from "../../hooks/services/useServices";
@@ -18,9 +18,11 @@ export default function Header() {
     switchToLogin, switchToRegister,
   } = useAuth();
 
-  const [isServicesOpen, setIsServicesOpen] = useState(false);
-  const [isCartOpen,     setIsCartOpen]     = useState(false);
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isServicesOpen,  setIsServicesOpen]  = useState(false);
+  const [isCartOpen,      setIsCartOpen]      = useState(false);
+  const [isUserMenuOpen,  setIsUserMenuOpen]  = useState(false);
+  const [isMobileOpen,    setIsMobileOpen]    = useState(false);
+  const [isMobileCatsOpen, setIsMobileCatsOpen] = useState(false);
 
   const { categories } = useServices();
   const { cart } = useCart();
@@ -29,8 +31,9 @@ export default function Header() {
 
   useEffect(() => {
     function handleClickOutside(e) {
-      if (!e.target.closest(`.${styles.dropdown}`)) setIsServicesOpen(false);
+      if (!e.target.closest(`.${styles.dropdown}`))  setIsServicesOpen(false);
       if (!e.target.closest(`.${styles.userMenu}`))  setIsUserMenuOpen(false);
+      if (!e.target.closest(`.${styles.cartWrapper}`)) setIsCartOpen(false);
     }
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
@@ -64,7 +67,6 @@ export default function Header() {
               >
                 {initials}
               </button>
-
               {isUserMenuOpen && (
                 <div className={styles.userDropdown}>
                   <div className={styles.userDropdownName}>{user.name} {user.surname}</div>
@@ -84,16 +86,15 @@ export default function Header() {
             </div>
           ) : (
             <button className={styles.menuButton} onClick={openLogin}>
-              <FaRegUser size={24} />
+              <FaRegUser size={18} />
             </button>
           )}
 
           <div className={styles.cartWrapper}>
             <button className={styles.menuButton} onClick={() => setIsCartOpen((v) => !v)}>
-              <IoCartOutline size={28} />
+              <IoCartOutline size={20} />
               {totalItems > 0 && <span className={styles.cartBadge}>{totalItems}</span>}
             </button>
-
             {isCartOpen && (
               <div className={styles.cartDropdown}>
                 {cart.length === 0 ? (
@@ -110,12 +111,20 @@ export default function Header() {
               </div>
             )}
           </div>
+
+          <button
+            className={styles.hamburger}
+            onClick={() => setIsMobileOpen((v) => !v)}
+            aria-label="Меню"
+          >
+            {isMobileOpen ? <IoCloseOutline /> : <IoMenuOutline />}
+          </button>
         </div>
       </div>
 
+      {/* desktop navbar */}
       <nav className={styles.navbar}>
         <Link to="/">Головна</Link>
-
         <div className={styles.dropdown}>
           <button className={styles.navLink} onClick={() => setIsServicesOpen((v) => !v)}>
             Послуги
@@ -126,10 +135,38 @@ export default function Header() {
             </div>
           )}
         </div>
-
         <Link to="/pricelist">Прайс-лист</Link>
         <Link to="/photo">Фото-аналіз</Link>
         <Link to="/delivery">Доставка</Link>
+      </nav>
+
+      {/* mobile nav */}
+      <nav className={`${styles.mobileNav} ${isMobileOpen ? styles.open : ""}`}>
+        <Link to="/" onClick={() => setIsMobileOpen(false)}>Головна</Link>
+
+        <button
+          className={styles.mobileNavLink}
+          onClick={() => setIsMobileCatsOpen((v) => !v)}
+        >
+          Послуги {isMobileCatsOpen ? "↑" : "↓"}
+        </button>
+        {isMobileCatsOpen && (
+          <div className={styles.mobileCategories}>
+            {categories.map((cat) => (
+              <Link
+                key={cat.id}
+                to={`/category/${cat.id}`}
+                onClick={() => { setIsMobileOpen(false); setIsMobileCatsOpen(false); }}
+              >
+                {cat.name}
+              </Link>
+            ))}
+          </div>
+        )}
+
+        <Link to="/pricelist" onClick={() => setIsMobileOpen(false)}>Прайс-лист</Link>
+        <Link to="/photo"     onClick={() => setIsMobileOpen(false)}>Фото-аналіз</Link>
+        <Link to="/delivery"  onClick={() => setIsMobileOpen(false)}>Доставка</Link>
       </nav>
 
       <LoginModal isOpen={isLoginOpen} onClose={closeModal} onSwitchToRegister={switchToRegister} />
