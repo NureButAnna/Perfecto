@@ -1,4 +1,6 @@
 from app.database import get_db
+from app.repositories.checkout import CheckoutRepository
+from app.repositories.services import ServiceRepository
 from app.repositories.images import ImageRepository
 from app.services.blob_storage import AzureBlobService
 from app.services.images import ImageService
@@ -8,6 +10,7 @@ from app.services.dry_cleaners import DryCleanerService
 from app.services.categories import CategoryService
 from app.services.users import UserService
 from app.services.services import ServService
+from app.services.reviews import ReviewService
 from app.services.items import ItemService
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
@@ -18,6 +21,8 @@ from starlette import status
 from app.models import User
 
 from app.security import decode_access_token
+
+from app.services.checkout import CheckoutService
 
 
 def get_user_service(db=Depends(get_db)) -> UserService:
@@ -39,10 +44,18 @@ def get_serv_service(db=Depends(get_db)) -> ServService:
 def get_delivery_service(db=Depends(get_db)) -> DeliveryService:
     return DeliveryService(db)
 
+def get_review_service(db=Depends(get_db)) -> ReviewService:
+    return ReviewService(db)
+
 
 def get_dry_cleaner_service(db=Depends(get_db)) -> DryCleanerService:
     return DryCleanerService(db)
 
+def get_checkout_service(db=Depends(get_db)) -> CheckoutService:
+    return CheckoutService(
+        checkout_repository=CheckoutRepository(db),
+        db=db
+    )
 
 def get_blob_service():
     return AzureBlobService()
@@ -82,6 +95,7 @@ def get_current_user(
     if user is None:
         raise credentials_exception
 
+    print(f"get_current_user: id={user.id}, role='{user.role}', role_bytes={user.role.encode()}")
     return user
 
 
