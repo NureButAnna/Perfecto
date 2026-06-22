@@ -22,10 +22,12 @@ class Order(Base):
     dry_cleaner_id: Mapped[int] = mapped_column(ForeignKey(
         "dry_cleaners.dry_cleaner_id", ondelete="CASCADE"))
 
-    users = relationship("User", back_populates="orders")
+    user = relationship("User", back_populates="orders")
     items = relationship("Item", back_populates="order")
     dry_cleaner = relationship("DryCleaner", back_populates="orders")
 
     order_services = relationship("OrderServices", back_populates="order",
                                   cascade="all, delete-orphan")
+
+    delivery = relationship("Delivery", back_populates="order", uselist=False)
 

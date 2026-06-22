@@ -2,8 +2,11 @@ from datetime import datetime
 from decimal import Decimal
 from typing import Optional
 from app.schemas.order_service import OrderServiceRead, OrderServiceCreate
+from app.schemas.delivery import DeliveryShort
+from app.schemas.review import UserShort
 
 from pydantic import BaseModel, ConfigDict
+
 
 class OrderBase(BaseModel):
     total_cost: Decimal
@@ -35,6 +38,8 @@ class OrderRead(BaseModel):
 
     payment_method: Optional[str] = None
     comment: Optional[str] = None
+    user: Optional[UserShort] = None
+    delivery: Optional[DeliveryShort] = None
 
     user_id: int
     dry_cleaner_id: int

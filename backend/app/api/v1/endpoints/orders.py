@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Query
 
 from app.models.user import User
 from app.schemas.order import OrderRead, OrderUpdate, OrderCreate
@@ -47,12 +47,11 @@ def update_order(
 @router.patch("/{order_id}/status")
 def update_order_status(
     order_id: int,
-    status: str,
+    status: str = Query(...),
     service: OrderService = Depends(get_order_service),
     current_user: User = Depends(require_role("адміністратор", "кур'єр"))
 ):
     return service.update_order_status(order_id, status)
-
 
 @router.post("/",response_model=OrderCreate, status_code=status.HTTP_201_CREATED)
 def add_order(
