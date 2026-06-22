@@ -74,6 +74,6 @@ class ServService:
                 detail=f"Service with id {service_id} not found"
             )
 
-        self.repository.delete(service)
+        self.repository.delete(service_id)
 
         return {"message": "Service deleted successfully"}

@@ -28,6 +28,9 @@ class Service(Base):
         nullable=True
     )
 
-    image = relationship("Image", back_populates="service")
+    image = relationship( "Image", back_populates="service",
+        uselist=False
+    )
     category = relationship("Category",back_populates="services")
     order_services = relationship("OrderServices", back_populates="service")
+    reviews = relationship("Review", back_populates="service", cascade="all, delete-orphan")
