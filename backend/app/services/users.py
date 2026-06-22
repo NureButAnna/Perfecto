@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 
+from app.models.user import User
 from app.schemas.user import UserRegister, UserUpdate, UserRead, UserRole
 from app.repositories.users import UserRepository
 
@@ -11,8 +12,8 @@ class UserService:
     def __init__(self, db: Session):
         self.repository = UserRepository(db)
 
-    def get_users_by_role(self, role: str) -> list[UserRead]:
-        users = self.repository.get_by_role(role)
+    def get_users_by_role(self, *roles: str) -> list[UserRead]:
+        users = self.repository.get_by_role(list(roles))
         return [UserRead.model_validate(user) for user in users]
 
     def get_user_by_id(self, user_id: int) -> UserRead:
@@ -25,6 +26,26 @@ class UserService:
             )
 
         return UserRead.model_validate(user)
+
+    def assign_delivery(self, user_id, dry_cleaner_id):
+        user = self.repository.get_by_id(user_id)
+
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"User with id {user_id} not found"
+            )
+
+        dry_cleaner = self.repository.get_by_id(dry_cleaner_id)
+
+        if not dry_cleaner:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Dry Cleaner with id {dry_cleaner_id} not found"
+            )
+
+        return UserRead.model_validate(user)
+
 
     def create_user(self, user_data: UserRegister) -> UserRead:
         if self.repository.get_by_email(user_data.email):
@@ -122,3 +143,21 @@ class UserService:
         )
 
         return UserRead.model_validate(updated_user)
+
+    def change_user_dry_cleaner(self, user_id: int, dry_cleaner_id: int) -> UserRead:
+        user = self.repository.get_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+        updated = self.repository.update(user_id, {"dry_cleaner_id": dry_cleaner_id})
+        return UserRead.model_validate(updated)
+
+    def update_user_status(self, user_id: int, is_active: bool):
+        user = self.repository.update_status(user_id, is_active)
+
+        if not user:
+            raise HTTPException(
+                status_code=404,
+                detail="User not found"
+            )
+
+        return UserRead.model_validate(user)
