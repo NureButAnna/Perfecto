@@ -24,7 +24,7 @@ def get_deliveries(
 def get_delivery(
     delivery_id: int,
     service:DeliveryService = Depends(get_delivery_service),
-    current_user: User = Depends(require_role("адміністратор", "кур'єр", "користувач"))
+    current_user: User = Depends(require_role("адміністратор", "кур'єр", "клієнт"))
 ):
     return service.get_delivery_by_id(delivery_id)
 
@@ -40,7 +40,7 @@ def get_employee_deliveries(
 def create_delivery(
     delivery_data: DeliveryCreate,
     service: DeliveryService = Depends(get_delivery_service),
-    current_user: User = Depends(require_role("адміністратор", "користувач"))
+    current_user: User = Depends(require_role("адміністратор", "клієнт"))
 ):
     return service.create_delivery(delivery_data)
 

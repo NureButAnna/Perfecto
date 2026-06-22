@@ -11,12 +11,12 @@ class Delivery(Base):
 
     id: Mapped[int] = mapped_column("delivery_id", primary_key=True, index=True)
     city: Mapped[str] = mapped_column(String(50))
-    street: Mapped[str]= mapped_column(String(100))
-    house_number: Mapped[str] = mapped_column(String(20))
+    street: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
+    house_number: Mapped[Optional[str]] = mapped_column(String(20), nullable=True)
     flat_number: Mapped[Optional[str]] = mapped_column(String(20))
     delivery_datetime: Mapped[datetime] = mapped_column(DateTime, nullable=False)
     delivery_type : Mapped[str] = mapped_column(String(30))
-    nova_poshta_branch: Mapped[str] = mapped_column(String(100))
+    nova_poshta_branch: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
 
     user_id: Mapped[int] = mapped_column(ForeignKey(
         "users.user_id", ondelete="SET NULL"))
@@ -24,3 +24,4 @@ class Delivery(Base):
         "orders.order_id", ondelete="CASCADE"))
 
     users = relationship("User", back_populates="deliveries")
+    order = relationship("Order", back_populates="delivery")
