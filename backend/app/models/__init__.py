@@ -6,3 +6,4 @@ from .service import Service
 from .image import Image
 from .dry_cleaner import DryCleaner
 from .category import Category
+from .review import Review
