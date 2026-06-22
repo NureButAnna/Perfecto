@@ -1,15 +1,18 @@
+import csv
+import io
+
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 
 from app.database import get_db
 from app.dependencies import require_role
-from app.models.delivery import Delivery
 from app.schemas.user import UserRead, UserRole
 from app.schemas.order import OrderRead
 from app.services.users import UserService
 from app.services.orders import OrderService
 from app.models import User
+from starlette.responses import StreamingResponse
 
 router = APIRouter(
     prefix="/admin",
@@ -100,6 +103,15 @@ def change_staff_role(
 ):
     return UserService(db).change_user_role(user_id, role)
 
+@router.patch("/staff/{user_id}/dry-cleaner", response_model=UserRead)
+def change_staff_dry_cleaner(
+    user_id: int,
+    dry_cleaner_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role("адміністратор"))
+):
+    return UserService(db).change_user_dry_cleaner(user_id, dry_cleaner_id)
+
 
 @router.delete("/staff/{user_id}", status_code=status.HTTP_200_OK)
 def delete_staff(
@@ -139,7 +151,7 @@ def update_order_status(
     order_id: int,
     new_status: str = Query(..., alias="status"),
     db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("адміністратор"))
+    current_user: User = Depends(require_role("адміністратор", "кур'єр"))
 ):
     if new_status not in ALLOWED_STATUSES:
         raise HTTPException(
@@ -156,55 +168,66 @@ def assign_courier(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_role("адміністратор"))
 ):
-    courier = UserService(db).get_user_by_id(user_id)
+    return OrderService(db).assign_courier(order_id, user_id)
 
-    if not courier:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Користувача не знайдено"
+@router.get("/orders/{order_id}/couriers", response_model=List[UserRead])
+def get_couriers_for_order(
+    order_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role("адміністратор"))
+):
+    order = OrderService(db).get_order_by_id(order_id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Замовлення не знайдено")
+
+    return (
+        db.query(User)
+        .filter(
+            User.role == "кур'єр",
+            User.is_active == True,
+            User.dry_cleaner_id == order.dry_cleaner_id
         )
+        .all()
+    )
 
-    if courier.role != "кур'єр":
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Вказаний користувач не є кур'єром"
-        )
-
-    delivery = db.query(Delivery).filter(
-        Delivery.order_id == order_id
-    ).first()
-
-    if not delivery:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Доставку для цього замовлення не знайдено"
-        )
-
-    delivery.user_id = user_id
-
-    db.commit()
-    db.refresh(delivery)
-
-    return OrderService(db).get_order_by_id(order_id)
 
 @router.get("/export/{type}")
 def export_data(
-    type: str,
-    from_date: str = Query(None, alias="from"),
-    to_date: str = Query(None, alias="to"),
-    db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("адміністратор"))
+        type: str,
+        from_date: str = Query(None, alias="from"),
+        to_date: str = Query(None, alias="to"),
+        db: Session = Depends(get_db),
+        current_user: User = Depends(require_role("адміністратор"))
 ):
     if type == "orders":
         data = OrderService(db).get_all_orders()
 
-    elif type == "staff":
-        data = UserService(db).get_users_by_role("персонал")
+        output = io.StringIO()
+        writer = csv.writer(output)
+        writer.writerow(["ID", "Клієнт", "Послуги", "Вартість", "Статус", "Оплата", "Доставка", "Місто", "Дата"])
 
-    elif type == "clients":
-        data = UserService(db).get_users_by_role("клієнт")
+        for o in data:
+            client = f"{o.user.surname} {o.user.name}" if o.user else "—"
+            services = "; ".join(
+                f"{s.service.name} x{s.number}" for s in o.order_services if s.service
+            ) if o.order_services else "—"
+            delivery_type = o.delivery.delivery_type if o.delivery else "—"
+            city = o.delivery.city if o.delivery else "—"
 
-    else:
-        raise HTTPException(404, "Unknown export type")
+            writer.writerow([
+                o.id, client, services, o.total_cost,
+                o.status, o.payment_method or "—",
+                delivery_type, city,
+                o.creation_date.strftime("%Y-%m-%d %H:%M")
+            ])
 
-    return data
+        output.seek(0)
+        content = "\ufeff" + output.getvalue()  # BOM для UTF-8
+
+        return StreamingResponse(
+            iter([content.encode("utf-8")]),
+            media_type="text/csv; charset=utf-8",
+            headers={"Content-Disposition": f"attachment; filename=orders.csv"}
+        )
+
+    raise HTTPException(404, "Unknown export type")
