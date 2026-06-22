@@ -17,6 +17,17 @@ class CategoryService:
         categories = self.repository.get_all()
         return [CategoryRead.model_validate(c) for c in categories]
 
+    def get_category_by_id(self, category_id: int) -> CategoryRead:
+        category = self.repository.get_by_id(category_id)
+
+        if not category:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Review with id {category_id} not found"
+            )
+
+        return CategoryRead.model_validate(category)
+
     def update_category(self, category_id: int, data: CategoryUpdate):
         updated = self.repository.update(
             category_id,

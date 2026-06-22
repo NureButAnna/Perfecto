@@ -1,0 +1,68 @@
+.services { background: #FBEAF0; padding: 80px 0; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+
+.sectionTitleDark {
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 500;
+  color: #2C2C2A;
+  text-align: center;
+  margin-bottom: 36px;
+  font-family: "Shantell Sans", cursive;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.serviceCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 12px;
+  background: #fff;
+  border-radius: 16px;
+  border: 0.5px solid rgba(0,0,0,0.08);
+  cursor: pointer;
+  transition: border-color 0.18s, transform 0.15s;
+  text-align: center;
+}
+.serviceCard:hover {
+  border-color: rgba(212,83,126,0.3);
+  transform: translateY(-2px);
+}
+
+.serviceIcon { font-size: 26px; line-height: 1; }
+
+.serviceLabel {
+  font-size: 12px;
+  color: #2C2C2A;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.servicesBtnRow { display: flex; justify-content: center; }
+
+.btnPrimary {
+  padding: 12px 28px;
+  background: transparent;
+  color: #D4537E;
+  border: 1.5px solid #D4537E;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.btnPrimary:hover { background: #D4537E; color: #fff; }
+
+@media (max-width: 1024px) { .servicesGrid { grid-template-columns: repeat(4, 1fr); } }
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+  .servicesGrid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 480px) { .servicesGrid { grid-template-columns: repeat(2, 1fr); } }

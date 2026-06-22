@@ -21,8 +21,8 @@ class Image(Base):
         "chats.chat_id", ondelete="CASCADE"),
         nullable= True
     )
-    response_id: Mapped[int] = mapped_column(ForeignKey(
-        "responses.response_id", ondelete="CASCADE"),
+    review_id: Mapped[int] = mapped_column(ForeignKey(
+        "reviews.review_id", ondelete="CASCADE"),
         nullable= True
     )
     service_id: Mapped[int] = mapped_column(ForeignKey(

@@ -30,18 +30,18 @@ export default function Footer() {
         <div className={styles.footerNav}>
           <a href="/">Головна</a>
           <a href="/">Послуги</a>
-          <a href="/">Прайс-лист</a>
-          <a href="/">Фото-аналіз</a>
-          <a href="/">Доставка</a>
+          <a href="/pricelist">Прайс-лист</a>
+          <a href="/photo">Фото-аналіз</a>
+          <a href="/delivery">Доставка</a>
         </div>
 
         <div className={styles.footerSocials}>
           <h3>Ми в соц мережах</h3>
 
           <div className={styles.socialIcons}>
-            <a href="/"> <FaInstagram /></a>
-            <a href="/"> <FaFacebookF /></a>
-            <a href="/"> <FaTiktok /></a>
+            <a href="https://www.instagram.com/perfectodryclean/"> <FaInstagram /></a>
+            <a href="https://www.facebook.com/?locale=uk_UA"> <FaFacebookF /></a>
+            <a href="https://www.tiktok.com/uk-UA/"> <FaTiktok /></a>
           </div>
         </div>
       </div>

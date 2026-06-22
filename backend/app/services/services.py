@@ -27,12 +27,23 @@ class ServService:
 
     def get_service_by_price(self, price: Decimal) -> ServiceRead:
         service = self.repository.get_by_price(price)
-        if not price:
+        if not service:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f'Service with price {price} not found'
             )
         return ServiceRead.model_validate(service)
+
+    def get_service_by_category(self, category_id: int):
+        services = self.repository.get_by_category(category_id)
+
+        if not services:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Services for category {category_id} not found"
+            )
+
+        return [ServiceRead.model_validate(service) for service in services]
 
     def create_service(self, service_data: ServiceCreate) -> ServiceRead:
         service = self.repository.create(
@@ -63,6 +74,6 @@ class ServService:
                 detail=f"Service with id {service_id} not found"
             )
 
-        self.repository.delete(service)
+        self.repository.delete(service_id)
 
         return {"message": "Service deleted successfully"}

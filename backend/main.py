@@ -11,6 +11,10 @@ from app.api.v1.endpoints.deliveries import router as delivery_router
 from app.api.v1.endpoints.dry_cleaners import router as dry_cleaner_router
 from app.api.v1.endpoints.categories import router as category_router
 from app.api.v1.endpoints.items import router as item_router
+from app.api.v1.endpoints.checkout import router as checkout_router
+from app.api.v1.endpoints.admin import router as admin_router
+from app.api.v1.endpoints.images import router as image_router
+from app.api.v1.endpoints.reviews import router as review_router
 
 app = FastAPI(
     title="Perfecto ✨",
@@ -22,7 +26,10 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://purple-rock-06e4c2f03.7.azurestaticapps.net",
+        ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -30,10 +37,14 @@ app.add_middleware(
 
 app.include_router(auth_router)
 app.include_router(user_router)
+app.include_router(admin_router)
 app.include_router(dry_cleaner_router)
 app.include_router(service_router)
+app.include_router(review_router)
+app.include_router(image_router)
 app.include_router(order_router)
 app.include_router(item_router)
+app.include_router(checkout_router)
 app.include_router(delivery_router)
 app.include_router(category_router)
 app.include_router(chat_router)

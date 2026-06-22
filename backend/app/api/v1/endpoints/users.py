@@ -44,7 +44,7 @@ def get_user(
 def create_user(
     user_data: UserRegister,
     service: UserService = Depends(get_user_service),
-    current_user: User = Depends(require_role("адміністратор", "користувач", "кур'єр"))
+    current_user: User = Depends(require_role("адміністратор", "клієнт", "кур'єр"))
 ):
 
     return service.create_user(user_data)
@@ -55,7 +55,7 @@ def update_user(
     user_id: int,
     user_data: UserUpdate,
     service: UserService = Depends(get_user_service),
-    current_user: User = Depends(require_role("адміністратор", "користувач", "кур'єр"))
+    current_user: User = Depends(require_role("адміністратор", "клієнт", "кур'єр"))
 ):
     return service.update_user(user_id, user_data)
 
@@ -73,8 +73,7 @@ def delete_user(
 def update_role(
     user_id: int,
     role: UserRole,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(require_role("адміністратор"))
+    db: Session = Depends(get_db)
 ):
     service = UserService(db)
     return service.change_user_role(user_id, role)

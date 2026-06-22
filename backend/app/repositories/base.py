@@ -40,7 +40,7 @@ class BaseRepository:
         return db_item
 
     def delete(self, item_id: int):
-        db_item = self.get_by_id(item_id)
+        db_item = self.db.get(self.model, item_id)
 
         if not db_item:
             return None

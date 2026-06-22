@@ -4,9 +4,8 @@ from typing import List
 from app.models import User
 from app.services.services import ServService
 from app.schemas.service import ServiceRead, ServiceCreate, ServiceUpdate
-from app.dependencies import get_serv_service, require_role
-
-
+from app.dependencies import get_serv_service, require_role, get_image_service
+from app.services.images import ImageService
 
 router = APIRouter(
     prefix="/services",
@@ -33,6 +32,12 @@ def get_service_by_price(
 ):
     return service.get_service_by_price(service_id)
 
+@router.get("/category/{category_id}", response_model=list[ServiceRead],)
+def get_service_by_category(
+    category_id: int,
+    service: ServService = Depends(get_serv_service)
+):
+    return service.get_service_by_category(category_id)
 
 @router.post("/", response_model=ServiceCreate)
 def create_service(
@@ -63,11 +68,11 @@ def delete_service(
 
 
 
-# @router.post("/services/{service_id}/images")
-# async def upload_service_image(
-#     service_id: int,
-#     file: UploadFile = File(...),
-#     description: str | None = Form(None),
-#     service: ImageService = Depends(get_image_service)
-# ):
-#     return await service.upload_to_service(service_id, file, description)
+@router.post("/services/{service_id}/images")
+async def upload_service_image(
+    service_id: int,
+    file: UploadFile = File(...),
+    description: str | None = Form(None),
+    service: ImageService = Depends(get_image_service)
+):
+    return await service.upload_to_service(service_id, file, description)

@@ -1,57 +1,86 @@
 .card {
-  background: white;
-
-
-  display: grid;
-  grid-template-rows: max-content 200px 1fr;
-}
-
-.card h3{
-  font-size: 24px;
-  font-weight: 400;
-  margin: 0;
-}
-
-.card:hover {
-  border-radius: 12px;
+  background: #fff;
+  border-radius: 16px;
+  border: 0.5px solid rgba(0,0,0,0.08);
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: 0.2s;
-  transform: translateY(-5px);
-}
-
-.cardImage {
-  width: 100%;
-  height: 220px;
-
-  object-fit: contain;
-}
-
-.container {
-  padding: 15px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  height: 100%;
+  transition: border-color 0.2s, transform 0.2s;
 }
+.card:hover {
+  border-color: rgba(212,83,126,0.3);
+  transform: translateY(-3px);
+}
+
+.imageWrap {
+  width: 100%;
+  height: 190px;
+  overflow: hidden;
+  background: #F9F9F7;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.3s;
+}
+.card:hover .image { transform: scale(1.03); }
+.imagePlaceholder { font-size: 40px; color: #ccc; }
+
+.body {
+  padding: 14px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 6px;
+}
+
+.name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #2C2C2A;
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.rating { display: flex; gap: 2px; }
+.star { color: var(--pink); font-size: 13px; }
 
 .price {
-  font-size: 16px;
-  font-weight:normal;
-  margin: 10px 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--pink);
+  margin: 0;
+  margin-top: auto;
 }
 
-.orderButton{
-  background-color: #FF2683;
-  color: #FFFFFF;
+.btn {
   width: 100%;
-  height: 44px;
-  text-align: center;
-  font-size: 16px;
+  padding: 10px;
+  border: 1.5px solid var(--pink);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--pink);
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
+  transition: all 0.18s;
+  margin-top: 6px;
 }
+.btn:hover { background: var(--pink); color: #fff; }
 
-.star{
-  fill: #FF2683;
-  font-size: 20px;
+.btnAdded {
+  background: #E1F5EE;
+  border-color: #1D9E75;
+  color: #0F6E56;
 }
+.btnAdded:hover { background: #1D9E75; color: #fff; }

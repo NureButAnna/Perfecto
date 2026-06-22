@@ -1,0 +1,120 @@
+.reviews { background: #F9F9F7; padding: 80px 0; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+
+.sectionTitleDark {
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 500;
+  color: #2C2C2A;
+  margin: 0;
+  font-family: "Shantell Sans", cursive;
+}
+
+.reviewsHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.reviewsLink {
+  font-size: 13px;
+  font-weight: 500;
+  color: #D4537E;
+  text-decoration: none;
+}
+.reviewsLink:hover { text-decoration: underline; }
+
+.reviewsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.reviewCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  border: 0.5px solid rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.reviewStars { display: flex; gap: 2px; font-size: 13px; color: #D4537E; }
+
+.reviewText {
+  font-size: 13px;
+  line-height: 1.75;
+  color: #2C2C2A;
+  margin: 0;
+  flex: 1;
+}
+
+.reviewFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 0.5px solid rgba(0,0,0,0.06);
+}
+
+.reviewAvatarRow { display: flex; align-items: center; gap: 8px; }
+
+.reviewAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #FBEAF0;
+  color: #D4537E;
+  font-weight: 500;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.reviewAuthor { font-size: 13px; font-weight: 500; color: #2C2C2A; }
+
+.reviewMetaRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reviewService {
+  font-size: 11px;
+  font-weight: 500;
+  color: #D4537E;
+  background: #FBEAF0;
+  border-radius: 20px;
+  padding: 2px 10px;
+}
+
+.reviewDate { font-size: 11px; color: #888780; }
+
+.servicesBtnRow { display: flex; justify-content: center; margin-top: 8px; }
+
+.btnPrimary {
+  padding: 12px 32px;
+  background: transparent;
+  color: #D4537E;
+  border: 1.5px solid #D4537E;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.btnPrimary:hover { background: #D4537E; color: #fff; }
+
+.statusText { text-align: center; color: #5F5E5A; font-size: 14px; padding: 24px 0; }
+
+@media (max-width: 900px) { .reviewsGrid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 600px) {
+  .container { padding: 0 20px; }
+  .reviewsGrid { grid-template-columns: 1fr; }
+}

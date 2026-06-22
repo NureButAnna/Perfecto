@@ -1,7 +1,11 @@
 from decimal import Decimal
 from typing import Optional
+from pydantic import BaseModel, ConfigDict, computed_field
 
-from pydantic import BaseModel, ConfigDict
+
+class ImageShort(BaseModel):
+    link: str
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ServiceBase(BaseModel):
@@ -21,9 +25,15 @@ class ServiceCreate(ServiceBase):
 
 class ServiceRead(ServiceBase):
     id: int
-    image_url: Optional[str] = None
+    image: Optional[ImageShort] = None
 
     model_config = ConfigDict(from_attributes=True)
+
+    @computed_field
+    @property
+    def image_url(self) -> Optional[str]:
+        return self.image.link if self.image else None
+
 
 class ServiceUpdate(BaseModel):
     name: Optional[str] = None
@@ -35,6 +45,7 @@ class ServiceUpdate(BaseModel):
     dry_cleaner_id: Optional[int] = None
 
     model_config = ConfigDict(from_attributes=True)
+
 
 class ServiceShort(BaseModel):
     id: int

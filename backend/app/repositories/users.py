@@ -5,10 +5,10 @@ from ..models.user import User
 class UserRepository(BaseRepository):
     model = User
 
-    def get_by_role(self, role: str):
+    def get_by_role(self, roles: list[str]):
         return (
             self.db.query(User)
-            .filter(User.role == role)
+            .filter(User.role.in_(roles))
             .all()
         )
 
@@ -18,6 +18,18 @@ class UserRepository(BaseRepository):
             .filter(User.email == email)
             .first()
         )
+
+    def update_status(self, user_id: int, is_active: bool):
+        user = self.get_by_id(user_id)
+
+        if not user:
+            return None
+
+        user.is_active = is_active
+        self.db.commit()
+        self.db.refresh(user)
+
+        return user
 
     def get_client_by_id(self, user_id: int):
         return (
