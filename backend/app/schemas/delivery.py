@@ -24,7 +24,7 @@ class DeliveryCreate(DeliveryBase):
 class DeliveryRead(DeliveryBase):
     id: int
     user_id: Optional[int] = None
-    order_id: int
+    order_id: Optional[int] = None
 
     model_config = ConfigDict(from_attributes=True)
 
