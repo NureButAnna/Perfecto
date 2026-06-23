@@ -13,11 +13,11 @@ export default function ReviewForm({ isOpen, onClose, onSubmit }) {
   const [loading, setLoading]   = useState(false);
   const [error, setError]       = useState("");
 
-  useEffect(() => {
-    fetch("http://127.0.0.1:8000/services/")
-      .then(res => res.json())
-      .then(data => setServices(data));
-  }, []);
+    useEffect(() => {
+      fetch(`${import.meta.env.VITE_API_URL}/services/`)
+        .then(res => res.json())
+        .then(data => setServices(data));
+    }, []);
 
   useEffect(() => {
     if (isOpen && !user) {
