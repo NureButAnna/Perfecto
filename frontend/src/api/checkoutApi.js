@@ -1,5 +1,7 @@
 import axios from "axios";
 
+console.log(import.meta.env.VITE_API_URL);
+
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
 });
@@ -11,7 +13,7 @@ api.interceptors.request.use((config) => {
 });
 
 export const checkoutApi = {
-  createCheckout: (data) => api.post("/checkout", data),
+  createCheckout: (data) => api.post("/checkout/", data),
 };
 
 export const dryCleanersApi = {
