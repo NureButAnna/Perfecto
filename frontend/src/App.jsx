@@ -10,6 +10,7 @@ import Cart from "./features/pages/Cart/Cart";
 import Checkout from "./features/pages/Checkout/Checkout";
 import Profile from "./features/pages/Profile/Profile";
 import NotFound from "./features/pages/NotFound/NotFound";
+import AiChat from "./components/AiChat/AiChat";
  
 
 import Header from "./components/Header/Header";
@@ -35,7 +36,7 @@ export default function App() {
       </Route>
 
       <Route path="/admin/login" element={<AdminLogin />} />
-<Route path="/admin/*"     element={<AdminDashboard />} />
+      <Route path="/admin/*"     element={<AdminDashboard />} />
     </Routes>
   );
 }
@@ -46,6 +47,7 @@ function WithLayout() {
       <Header />
       <Outlet />
       <Footer />
+      <AiChat />
     </>
   );
 }

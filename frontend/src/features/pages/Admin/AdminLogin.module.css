@@ -1,133 +1,204 @@
-/* AdminLogin.module.css */
-
 .page {
   min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  font-family: 'Futura PT', 'Futura', 'Trebuchet MS', Arial, sans-serif;
+}
+
+/* ── Ліва панель (форма) ── */
+.left {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  background: #f5f4f2;
-  padding: 1rem;
-}
-
-.card {
+  padding: 60px 56px;
   background: #fff;
-  border-radius: 16px;
-  padding: 2.5rem 2rem;
-  width: 100%;
-  max-width: 400px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
 }
 
-/* ── Бренд ── */
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 2rem;
+  gap: 8px;
+  margin-bottom: 48px;
 }
 
 .brandIcon {
-  font-size: 1.4rem;
-  color: #c084a0;
+  font-size: 22px;
+  color: #D4537E;
 }
 
 .brandName {
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  color: #2d2d2d;
+  font-size: 20px;
+  font-weight: 500;
+  color: #C40060;
+  font-family: "Shantell Sans", cursive;
 }
 
-/* ── Заголовок ── */
 .title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin: 0 0 0.35rem;
+  font-size: 24px;
+  font-weight: 500;
+  color: #2C2C2A;
+  margin: 0 0 6px;
 }
 
 .subtitle {
-  font-size: 0.875rem;
-  color: #777;
-  margin: 0 0 1.75rem;
+  font-size: 14px;
+  color: #5F5E5A;
+  margin: 0 0 32px;
+  line-height: 1.5;
 }
 
-/* ── Форма ── */
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 16px;
+  max-width: 360px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 5px;
 }
 
 .label {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #444;
+  font-size: 11px;
+  font-weight: 500;
+  color: #5F5E5A;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
 }
 
 .input {
-  padding: 0.65rem 0.9rem;
-  border: 1.5px solid #e0dede;
+  height: 42px;
+  padding: 0 14px;
+  border: 0.5px solid rgba(0,0,0,0.15);
   border-radius: 8px;
-  font-size: 0.95rem;
-  color: #1a1a1a;
-  background: #fafafa;
-  transition: border-color 0.18s, box-shadow 0.18s;
-  outline: none;
-}
-
-.input:focus {
-  border-color: #c084a0;
-  box-shadow: 0 0 0 3px rgba(192, 132, 160, 0.15);
+  font-size: 14px;
+  color: #2C2C2A;
   background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+  font-family: inherit;
 }
+.input:focus { border-color: #D4537E; }
+.input::placeholder { color: #888780; }
 
-.input::placeholder {
-  color: #bbb;
-}
-
-/* ── Помилка ── */
 .error {
-  font-size: 0.85rem;
-  color: #d9534f;
-  background: #fff5f5;
-  border: 1px solid #f5c6c6;
-  border-radius: 6px;
-  padding: 0.5rem 0.75rem;
+  font-size: 13px;
+  color: #A32D2D;
+  background: #FCEBEB;
+  border: 0.5px solid #F7C1C1;
+  border-radius: 8px;
+  padding: 9px 12px;
   margin: 0;
 }
 
-/* ── Кнопка ── */
 .btn {
-  margin-top: 0.25rem;
-  padding: 0.75rem;
-  background: #c084a0;
+  height: 44px;
+  background: #2C2C2A;
   color: #fff;
   border: none;
-  border-radius: 8px;
-  font-size: 0.95rem;
-  font-weight: 600;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.18s, transform 0.1s;
+  transition: background 0.15s;
+  margin-top: 4px;
+  font-family: inherit;
+}
+.btn:hover:not(:disabled) { background: #D4537E; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Права панель (ілюстрація) ── */
+.right {
+  background: #E1F5EE;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 60px 40px;
+  position: relative;
+  overflow: hidden;
 }
 
-.btn:hover:not(:disabled) {
-  background: #a8688a;
+.right::before {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  top: -100px;
+  right: -100px;
 }
 
-.btn:active:not(:disabled) {
-  transform: scale(0.98);
+.right::after {
+  content: '';
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  bottom: -60px;
+  left: -60px;
 }
 
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.illustration {
+  font-size: 100px;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.08));
+}
+
+.rightTitle {
+  font-size: 22px;
+  font-weight: 500;
+  color: #085041;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  margin: 0;
+}
+
+.rightSubtitle {
+  font-size: 14px;
+  color: #1D9E75;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  margin: -16px 0 0;
+  line-height: 1.6;
+  max-width: 280px;
+}
+
+.features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  z-index: 1;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #085041;
+  background: rgba(255,255,255,0.5);
+  padding: 10px 16px;
+  border-radius: 10px;
+}
+
+.featureIcon {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+/* ── Адаптив ── */
+@media (max-width: 768px) {
+  .page { grid-template-columns: 1fr; }
+  .right { display: none; }
+  .left { padding: 40px 24px; }
 }

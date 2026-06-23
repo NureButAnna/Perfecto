@@ -1,0 +1,107 @@
+{
+  "hero": {
+    "badge": "Working since 1998",
+    "title": "Cleanliness without hassle —",
+    "accent": "quality, fast, convenient.",
+    "subtitle": "With years of experience, we provide professional care for your belongings.",
+    "btnPrice": "Calculate cost",
+    "btnFind": "Find a branch"
+  },
+  "about": {
+    "title": "About us",
+    "p1": "We have been working in the dry cleaning industry for over 20 years, continuously improving our technologies and formulas.",
+    "p2": "Our experience allows us to effectively handle the most stubborn stains while preserving the structure and color of fabrics.",
+    "p3": "We use modern equipment and safe products that guarantee quality results.",
+    "imgAlt": "Perfecto Team"
+  },
+  "examples": {
+    "title": "Our work",
+    "subtitle": "Results that speak for themselves.",
+    "showMore": "More work ↓",
+    "collapse": "Collapse ↑",
+    "before": "BEFORE",
+    "after": "AFTER"
+  },
+  "howItWorks": {
+    "title": "How it works"
+  },
+  "location": {
+    "title": "Where to find us?",
+    "subtitle": "Choose a city and browse available branches",
+    "allCities": "All cities",
+    "loading": "Loading branches…",
+    "mapLoading": "Loading map...",
+    "branchName": "Perfecto — {{city}}",
+    "ctaText": "Didn't find a branch in your city?",
+    "ctaBold": "Send your items by Nova Poshta",
+    "orderBtn": "Place an order"
+  },
+  "novaPoshta": {
+    "title": "Order via Nova Poshta",
+    "subtitle": "Send your items — we'll clean and return them",
+    "sectionClient": "Your details",
+    "labelName": "Name",
+    "labelPhone": "Phone",
+    "sectionShipping": "Shipping",
+    "labelCity": "City *",
+    "placeholderCity": "E.g.: Kharkiv",
+    "labelBranch": "NP Branch *",
+    "placeholderBranch": "E.g.: №12",
+    "sectionServices": "Choose services *",
+    "labelCategory": "Category",
+    "loadingServices": "Loading services...",
+    "noServices": "No services in this category",
+    "selectedCount": "Selected: {{count}}",
+    "priceFrom": "from {{price}} UAH",
+    "labelComment": "Order comment",
+    "placeholderComment": "Describe the condition of items, wishes, etc...",
+    "errorServices": "Please select at least one service",
+    "errorCity": "Please enter city and branch",
+    "errorFetch": "Failed to load categories",
+    "errorSubmit": "Error placing order",
+    "cancel": "Cancel",
+    "submit": "Place order",
+    "submitting": "Processing...",
+    "successTitle": "Order placed!",
+    "successText": "Our manager will contact you shortly to confirm the details.",
+    "close": "Close"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "viewAll": "View all →",
+    "allTitle": "All reviews",
+    "loading": "Loading reviews…",
+    "empty": "No reviews yet. Be the first!",
+    "leaveReview": "Leave a review"
+  },
+  "reviewForm": {
+    "title": "Write a review",
+    "labelService": "Choose a service",
+    "placeholderService": "Select a service",
+    "labelRating": "Rate our service",
+    "labelComment": "Comment",
+    "placeholderComment": "Share your impressions...",
+    "errorRating": "Please rate the service",
+    "errorService": "Please select a service",
+    "errorComment": "Please write a comment",
+    "errorSubmit": "Failed to submit review. Please try again.",
+    "cancel": "Cancel",
+    "submit": "Leave a review",
+    "submitting": "Sending…"
+  },
+  "header": {
+    "search": "Search",
+    "switchLang": "Switch language",
+    "profile": "My profile",
+    "logout": "Log out",
+    "cartEmpty": "Cart is empty",
+    "goToCart": "Go to cart",
+    "currency": "UAH",
+    "menu": "Menu",
+    "home": "Home",
+    "services": "Services",
+    "pricelist": "Price list",
+    "photo": "Photo analysis",
+    "delivery": "Delivery"
+  }
+}

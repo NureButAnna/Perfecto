@@ -9,6 +9,7 @@ import { useServices } from "../../hooks/services/useServices";
 import CategoryDropdown from "../../features/pages/Services/components/CategoryDropdown";
 import { useCart } from "../../hooks/useCart";
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function Header() {
   const {
@@ -18,10 +19,12 @@ export default function Header() {
     switchToLogin, switchToRegister,
   } = useAuth();
 
-  const [isServicesOpen,  setIsServicesOpen]  = useState(false);
-  const [isCartOpen,      setIsCartOpen]      = useState(false);
-  const [isUserMenuOpen,  setIsUserMenuOpen]  = useState(false);
-  const [isMobileOpen,    setIsMobileOpen]    = useState(false);
+  const { t, i18n } = useTranslation();
+
+  const [isServicesOpen,   setIsServicesOpen]   = useState(false);
+  const [isCartOpen,       setIsCartOpen]       = useState(false);
+  const [isUserMenuOpen,   setIsUserMenuOpen]   = useState(false);
+  const [isMobileOpen,     setIsMobileOpen]     = useState(false);
   const [isMobileCatsOpen, setIsMobileCatsOpen] = useState(false);
 
   const { categories } = useServices();
@@ -29,10 +32,14 @@ export default function Header() {
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
 
+  const toggleLang = () => {
+    i18n.changeLanguage(i18n.language === "uk" ? "en" : "uk");
+  };
+
   useEffect(() => {
     function handleClickOutside(e) {
-      if (!e.target.closest(`.${styles.dropdown}`))  setIsServicesOpen(false);
-      if (!e.target.closest(`.${styles.userMenu}`))  setIsUserMenuOpen(false);
+      if (!e.target.closest(`.${styles.dropdown}`))    setIsServicesOpen(false);
+      if (!e.target.closest(`.${styles.userMenu}`))    setIsUserMenuOpen(false);
       if (!e.target.closest(`.${styles.cartWrapper}`)) setIsCartOpen(false);
     }
     document.addEventListener("click", handleClickOutside);
@@ -46,10 +53,13 @@ export default function Header() {
   return (
     <header className={styles.header}>
       <div className={styles.topHeader}>
-        <button className={styles.menuButton}>UA</button>
+
+        <button className={styles.menuButton} onClick={toggleLang} title={t("header.switchLang")}>
+          {i18n.language === "uk" ? "EN" : "УК"}
+        </button>
 
         <div className={styles.searchBox}>
-          <input type="text" placeholder="Пошук" />
+          <input type="text" placeholder={t("header.search")} />
           <button><IoSearch /></button>
         </div>
 
@@ -73,13 +83,13 @@ export default function Header() {
                   <div className={styles.userDropdownEmail}>{user.email}</div>
                   <hr className={styles.divider} />
                   <Link to="/profile" className={styles.userDropdownItem} onClick={() => setIsUserMenuOpen(false)}>
-                    👤 Мій профіль
+                    👤 {t("header.profile")}
                   </Link>
                   <button
                     className={`${styles.userDropdownItem} ${styles.userDropdownLogout}`}
                     onClick={() => { logout(); setIsUserMenuOpen(false); }}
                   >
-                    🚪 Вийти
+                    🚪 {t("header.logout")}
                   </button>
                 </div>
               )}
@@ -98,16 +108,16 @@ export default function Header() {
             {isCartOpen && (
               <div className={styles.cartDropdown}>
                 {cart.length === 0 ? (
-                  <p>Кошик порожній</p>
+                  <p>{t("header.cartEmpty")}</p>
                 ) : (
                   cart.map((item) => (
                     <div key={item.id} className={styles.cartItem}>
                       <p>{item.name}</p>
-                      <small>{item.price} грн × {item.quantity}</small>
+                      <small>{item.price} {t("header.currency")} × {item.quantity}</small>
                     </div>
                   ))
                 )}
-                <Link to="/cart" onClick={() => setIsCartOpen(false)}>Перейти в кошик</Link>
+                <Link to="/cart" onClick={() => setIsCartOpen(false)}>{t("header.goToCart")}</Link>
               </div>
             )}
           </div>
@@ -115,7 +125,7 @@ export default function Header() {
           <button
             className={styles.hamburger}
             onClick={() => setIsMobileOpen((v) => !v)}
-            aria-label="Меню"
+            aria-label={t("header.menu")}
           >
             {isMobileOpen ? <IoCloseOutline /> : <IoMenuOutline />}
           </button>
@@ -124,10 +134,10 @@ export default function Header() {
 
       {/* desktop navbar */}
       <nav className={styles.navbar}>
-        <Link to="/">Головна</Link>
+        <Link to="/">{t("header.home")}</Link>
         <div className={styles.dropdown}>
           <button className={styles.navLink} onClick={() => setIsServicesOpen((v) => !v)}>
-            Послуги
+            {t("header.services")}
           </button>
           {isServicesOpen && (
             <div className={styles.dropdownMenu}>
@@ -135,20 +145,17 @@ export default function Header() {
             </div>
           )}
         </div>
-        <Link to="/pricelist">Прайс-лист</Link>
-        <Link to="/photo">Фото-аналіз</Link>
-        <Link to="/delivery">Доставка</Link>
+        <Link to="/pricelist">{t("header.pricelist")}</Link>
+        <Link to="/photo">{t("header.photo")}</Link>
+        <Link to="/delivery">{t("header.delivery")}</Link>
       </nav>
 
       {/* mobile nav */}
       <nav className={`${styles.mobileNav} ${isMobileOpen ? styles.open : ""}`}>
-        <Link to="/" onClick={() => setIsMobileOpen(false)}>Головна</Link>
+        <Link to="/" onClick={() => setIsMobileOpen(false)}>{t("header.home")}</Link>
 
-        <button
-          className={styles.mobileNavLink}
-          onClick={() => setIsMobileCatsOpen((v) => !v)}
-        >
-          Послуги {isMobileCatsOpen ? "↑" : "↓"}
+        <button className={styles.mobileNavLink} onClick={() => setIsMobileCatsOpen((v) => !v)}>
+          {t("header.services")} {isMobileCatsOpen ? "↑" : "↓"}
         </button>
         {isMobileCatsOpen && (
           <div className={styles.mobileCategories}>
@@ -164,9 +171,9 @@ export default function Header() {
           </div>
         )}
 
-        <Link to="/pricelist" onClick={() => setIsMobileOpen(false)}>Прайс-лист</Link>
-        <Link to="/photo"     onClick={() => setIsMobileOpen(false)}>Фото-аналіз</Link>
-        <Link to="/delivery"  onClick={() => setIsMobileOpen(false)}>Доставка</Link>
+        <Link to="/pricelist" onClick={() => setIsMobileOpen(false)}>{t("header.pricelist")}</Link>
+        <Link to="/photo"     onClick={() => setIsMobileOpen(false)}>{t("header.photo")}</Link>
+        <Link to="/delivery"  onClick={() => setIsMobileOpen(false)}>{t("header.delivery")}</Link>
       </nav>
 
       <LoginModal isOpen={isLoginOpen} onClose={closeModal} onSwitchToRegister={switchToRegister} />

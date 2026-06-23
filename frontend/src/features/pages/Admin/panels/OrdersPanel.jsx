@@ -65,8 +65,7 @@ export default function OrdersPanel() {
     const matchSearch =
       !q ||
       String(o.id).includes(q) ||
-      (o.client_name || "").toLowerCase().includes(q) ||
-      (o.items || "").toLowerCase().includes(q);
+      (`${o.user?.surname ?? ""} ${o.user?.name ?? ""}`).toLowerCase().includes(q);
     return matchFilter && matchSearch;
   });
 
@@ -97,21 +96,15 @@ export default function OrdersPanel() {
     }
   };
 
-  const handleAssignCourier = async (orderId, courierId) => {
-    try {
-      await adminApi.assignCourier(orderId, courierId);
-
-      setOrders((prev) =>
-        prev.map((o) =>
-          o.id === orderId
-            ? { ...o, courier_id: courierId }
-            : o
-        )
-      );
-    } catch (e) {
-      console.error(e);
-    }
-  };
+const handleAssignCourier = async (orderId, courierId) => {
+  try {
+    await adminApi.assignCourier(orderId, courierId);
+    await load();
+    setSelected(prev => prev ? { ...prev, courier_id: courierId } : null);
+  } catch (e) {
+    console.error(e);
+  }
+};
 
   const handleQuickAdvance = async (e, order) => {
     e.stopPropagation();
@@ -186,37 +179,39 @@ export default function OrdersPanel() {
               </thead>
               <tbody>
                 {filtered.map((o) => {
-                  const courierName = o.courier_name ?? "—";
-                  const next = getNextStatus(o.status);
+                const clientName = o.user
+                  ? `${o.user.surname ?? ""} ${o.user.name ?? ""}`.trim()
+                  : "—";
 
-                  return (
-                    <tr
-                      key={o.id}
-                      className={styles.tr}
-                      onClick={() => setSelected(o)}
-                    >
-                      <Td>
-                        <span style={{ fontWeight: 600, color: "var(--pink-600)" }}>
-                          #{o.id}
-                        </span>
-                      </Td>
-                      <Td>
-                        <div className={styles.clientCell}>
-                          <div className={styles.clientAvatar}>
-                            {getInitials(o.client_name)}
-                          </div>
-                          {o.client_name}
-                        </div>
-                      </Td>
-                      <Td>{o.items}</Td>
-                      <Td><strong>₴{o.total_price}</strong></Td>
-                      <Td>
-                        <span className={`${styles.badge} ${getStatusBadgeClass(o.status)}`}>
-                          <span className={styles.badgeDot} />
-                          {STATUS_LABEL[o.status] ?? o.status}
-                        </span>
-                      </Td>
-                      <Td>{courierName}</Td>
+                const servicesList = o.order_services?.length
+                  ? o.order_services.map((s) => s.service?.name ?? "—").join(", ")
+                  : "—";
+
+                const courierName = "—"; // поки немає в OrderRead
+                const next = getNextStatus(o.status);
+
+                return (
+                  <tr key={o.id} className={styles.tr} onClick={() => setSelected(o)}>
+                    <Td>
+                      <span style={{ fontWeight: 600, color: "var(--pink-600)" }}>#{o.id}</span>
+                    </Td>
+                    <Td>
+                      <div className={styles.clientCell}>
+                        <div className={styles.clientAvatar}>{getInitials(clientName)}</div>
+                        {clientName}
+                      </div>
+                    </Td>
+                    <Td>{servicesList}</Td>
+                    <Td><strong>₴{o.total_cost}</strong></Td>
+                    <Td>
+                      <span className={`${styles.badge} ${getStatusBadgeClass(o.status)}`}>
+                        <span className={styles.badgeDot} />
+                        {STATUS_LABEL[o.status] ?? o.status}
+                      </span>
+                    </Td>
+                    <Td>
+                      {o.delivery?.delivery_type === "courier" ? (courierName || "Не призначений") : "—"}
+                    </Td>
                       <Td>
                         <div className={styles.actions} onClick={(e) => e.stopPropagation()}>
                           <button

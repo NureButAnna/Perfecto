@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { steps } from '../../../data/deliveryData';
 import {
 ShieldCheck,
 Clock,
@@ -15,38 +16,8 @@ export const DeliveryTab = ({ onOpenCourierBooking }) => {
 const [question, setQuestion] = useState('');
 const [askSuccess, setAskSuccess] = useState(false);
 
-const steps = [
-{
-title: 'Оформлення замовлення',
-desc: 'Залиште заявку через сайт або за телефоном.'
-},
-{
-title: 'Виїзд курʼєра',
-desc: 'Курʼєр забере речі у зручний для вас час.'
-},
-{
-title: 'Професійне чищення',
-desc: 'Ваші речі проходять усі етапи професійної обробки.'
-},
-{
-title: 'Доставка',
-desc: 'Повертаємо чисті речі прямо до ваших дверей.'
-}
-];
-
 const handleAsk = (e) => {
 e.preventDefault();
-
-```
-if (question.trim()) {
-  setAskSuccess(true);
-
-  setTimeout(() => {
-    setQuestion('');
-    setAskSuccess(false);
-  }, 3500);
-}
-```
 
 };
 

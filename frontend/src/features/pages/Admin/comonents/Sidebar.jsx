@@ -10,7 +10,7 @@ const MENU = [
 export default function Sidebar({ active, setActive, onLogout}) {
   return (
     <aside className={styles.sidebar}>
-      <div className={styles.sidebarLogo}>✨ Perfecto Admin</div>
+      <div className={styles.sidebarLogo}> Perfecto Admin</div>
 
       <nav className={styles.sidebarNav}>
         {MENU.map((m) => (

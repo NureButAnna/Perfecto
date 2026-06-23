@@ -20,7 +20,7 @@
 .menuButton {
   width: 38px;
   height: 38px;
-  background: #FBEAF0;
+  background: var(--pink-light);
   border: 0.5px solid rgba(0,0,0,0.1);
   border-radius: 50%;
   display: flex;
@@ -45,7 +45,7 @@
   width: 180px;
   transition: border-color 0.15s;
 }
-.searchBox:focus-within { border-color: #D4537E; }
+.searchBox:focus-within { border-color: var(--pink); }
 .searchBox input {
   border: none;
   background: transparent;
@@ -65,7 +65,7 @@
 }
 
 .logo {
-  color: #C40060;
+  color: var(--pink-dark);
   font-family: "Shantell Sans", cursive;
   font-size: 40px;
   font-weight: 500;
@@ -105,7 +105,7 @@
   cursor: pointer;
   font-family: inherit;
 }
-.navbar a:hover, .navLink:hover { color: #D4537E; }
+.navbar a:hover, .navLink:hover { color: var(--pink); }
 
 .dropdown { position: relative; display: inline-block; }
 
@@ -121,7 +121,6 @@
   overflow: hidden;
 }
 
-/* hamburger */
 .hamburger {
   display: none;
   width: 38px;
@@ -137,7 +136,6 @@
   flex-shrink: 0;
 }
 
-/* mobile nav */
 .mobileNav {
   display: none;
   flex-direction: column;
@@ -180,16 +178,15 @@
   font-size: 14px;
   color: #5F5E5A;
 }
-.mobileCategories a:hover { color: #D4537E; background: transparent; }
+.mobileCategories a:hover { color: var(--pink); background: transparent; }
 
-/* cart / user dropdowns */
 .cartWrapper { position: relative; }
 
 .cartBadge {
   position: absolute;
   top: -4px;
   right: -4px;
-  background: #D4537E;
+  background: var(--pink);
   color: #fff;
   border-radius: 50%;
   font-size: 10px;
@@ -216,7 +213,7 @@
   display: block;
   margin-top: 10px;
   font-size: 13px;
-  color: #D4537E;
+  color: var(--pink);
   text-decoration: none;
   font-weight: 500;
 }
@@ -233,7 +230,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: #D4537E;
+  background: var(--pink);
   color: #fff;
   font-size: 12px;
   font-weight: 500;
@@ -244,7 +241,7 @@
   justify-content: center;
   transition: background 0.15s;
 }
-.avatarBtn:hover { background: #b8395f; }
+.avatarBtn:hover { background: var(--pink-dark); }
 
 .userMenu { position: relative; }
 

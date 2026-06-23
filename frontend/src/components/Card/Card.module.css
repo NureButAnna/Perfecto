@@ -79,8 +79,8 @@
 .btn:hover { background: var(--pink); color: #fff; }
 
 .btnAdded {
-  background: #E1F5EE;
-  border-color: #1D9E75;
-  color: #0F6E56;
+  background: var(--teal-light);
+  border-color: var(--teal);
+  color: var(--teal-dark);
 }
-.btnAdded:hover { background: #1D9E75; color: #fff; }
+.btnAdded:hover { background: var(--teal); color: #fff; }

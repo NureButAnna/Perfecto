@@ -3,12 +3,13 @@
   border-bottom: 0.5px solid rgba(0,0,0,0.08);
 }
 
-.statsInner {
+.container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 48px 48px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  font-family: 'Futura PT', 'Futura', 'Trebuchet MS', Arial, sans-serif;
 }
 
 .statItem {
@@ -24,7 +25,7 @@
 .statValue {
   font-size: clamp(26px, 4vw, 38px);
   font-weight: 500;
-  color: #D4537E;
+  color: var(--pink);
 }
 
 .statLabel {

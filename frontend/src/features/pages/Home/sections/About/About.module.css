@@ -1,6 +1,11 @@
-.about { background: #FBEAF0; padding: 80px 0; }
+.about { background: var(--pink-light); padding: 80px 0; }
 
-.container { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+.container { 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  padding: 0 48px;
+  font-family: 'Futura PT', 'Futura', 'Trebuchet MS', Arial, sans-serif;
+ }
 
 .sectionTitle {
   font-size: clamp(22px, 3vw, 32px);
@@ -29,7 +34,7 @@
 .aboutImgFrame {
   border-radius: 16px;
   overflow: hidden;
-  border: 0.5px solid rgba(0,0,0,0.1);
+  border: 5px solid var(--pink-dark);
 }
 
 .aboutImgWrap {

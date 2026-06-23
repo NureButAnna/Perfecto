@@ -20,7 +20,7 @@ export default function AdminDashboard() {
 
   const handleLogout = useCallback(() => {
     localStorage.removeItem("token");
-    navigate("/login");
+    navigate("/admin/login");
   }, [navigate]);
 
   return (

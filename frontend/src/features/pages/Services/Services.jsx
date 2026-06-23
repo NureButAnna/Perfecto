@@ -1,26 +1,39 @@
-import { useEffect, useState } from "react";
+  import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Card from "../../../components/Card/Card";
 import styles from "./Services.module.css";
+import {
+  getCategory,
+  getServicesByCategory,
+} from "../../../api/categoryApi";
 
 export default function CategoryPage() {
   const { id } = useParams();
+
   const [services, setServices] = useState([]);
   const [category, setCategory] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:8000/categories/${id}`)
-      .then(res => res.json())
-      .then(data => setCategory(data))
-      .catch(err => console.error("Category error:", err));
+    async function loadData() {
+      try {
+        const [categoryData, servicesData] = await Promise.all([
+          getCategory(id),
+          getServicesByCategory(id),
+        ]);
 
-    fetch(`http://127.0.0.1:8000/services/category/${id}`)
-      .then(res => res.json())
-      .then(data => setServices(data))
-      .catch(err => console.error("Error:", err))
-      .finally(() => setLoading(false));
+        setCategory(categoryData);
+        setServices(servicesData);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    loadData();
   }, [id]);
+
 
   return (
     <div className={styles.page}>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { dryCleanersApi } from "../../../api/checkoutApi";
+import { dryCleanersApi } from "../api/checkoutApi";
 
 export function useDryCleaners() {
   const [drycleaners, setDrycleaners] = useState([]);

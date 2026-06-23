@@ -10,7 +10,6 @@ export default function Cart() {
     <div className={styles.page}>
       <div className={styles.container}>
 
-        {/* ── Заголовок ── */}
         <div className={styles.header}>
           <h1 className={styles.title}>Кошик</h1>
           {cart.length > 0 && (
@@ -30,24 +29,22 @@ export default function Cart() {
         ) : (
           <div className={styles.layout}>
 
-            {/* ── Список товарів ── */}
+
             <div className={styles.items}>
               {cart.map((item) => (
                 <div key={item.id} className={styles.item}>
-                  {/* Зображення */}
                   {item.imageUrl ? (
                     <img src={item.imageUrl} alt={item.name} className={styles.itemImage} />
                   ) : (
                     <div className={styles.itemImagePlaceholder}>✂️</div>
                   )}
 
-                  {/* Інфо */}
                   <div className={styles.itemInfo}>
                     <h3 className={styles.itemName}>{item.name}</h3>
                     <p className={styles.itemPrice}>{Number(item.price).toFixed(2)} грн / од.</p>
                   </div>
 
-                  {/* Контроль кількості */}
+
                   <div className={styles.controls}>
                     <button
                       className={styles.controlBtn}
@@ -64,12 +61,10 @@ export default function Cart() {
                     </button>
                   </div>
 
-                  {/* Сума за позицію */}
                   <div className={styles.itemTotal}>
                     {(item.quantity * item.price).toFixed(2)} грн
                   </div>
 
-                  {/* Видалити */}
                   <button
                     className={styles.removeBtn}
                     onClick={() => removeFromCart(item.id)}
@@ -81,7 +76,6 @@ export default function Cart() {
               ))}
             </div>
 
-            {/* ── Підсумок ── */}
             <div className={styles.summary}>
               <h2 className={styles.summaryTitle}>Підсумок</h2>
 
