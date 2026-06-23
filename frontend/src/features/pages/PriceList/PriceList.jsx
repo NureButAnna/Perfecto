@@ -14,8 +14,8 @@ export default function PriceList() {
  
   useEffect(() => {
   Promise.all([
-    fetch("http://127.0.0.1:8000/categories").then(res => res.json()),
-    fetch("http://127.0.0.1:8000/services").then(res => res.json())
+    fetch(`${import.meta.env.VITE_API_URL}/categories`).then(res => res.json()),
+    fetch(`${import.meta.env.VITE_API_URL}/services`).then(res => res.json())
   ])
     .then(([cats, svcs]) => {
       setCategories([{ id: 0, name: "Усі послуги" }, ...cats]);
@@ -24,7 +24,6 @@ export default function PriceList() {
     })
     .catch(console.error);
 }, []);
- 
 
   const filtered = useMemo(() => {
     let list = services;
