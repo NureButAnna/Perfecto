@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import "./PriceList.css";
 import { SearchIcon, MinusIcon, PlusIcon, TrashIcon, PhoneIcon } from "../utils/icons";
+import { getCategories, getServices } from "../../../api/categoryApi";
 
 
 export default function PriceList() {
@@ -13,17 +14,23 @@ export default function PriceList() {
   const [cart, setCart] = useState([]);
  
   useEffect(() => {
-  Promise.all([
-    fetch(`${import.meta.env.VITE_API_URL}/categories`).then(res => res.json()),
-    fetch(`${import.meta.env.VITE_API_URL}/services`).then(res => res.json())
-  ])
-    .then(([cats, svcs]) => {
-      setCategories([{ id: 0, name: "Усі послуги" }, ...cats]);
-      setServices(svcs);
-      setLoading(false);
-    })
-    .catch(console.error);
-}, []);
+    Promise.all([
+      getCategories(),
+      getServices()
+    ])
+      .then(([cats, svcs]) => {
+        setCategories([
+          { id: 0, name: "Усі послуги" },
+          ...cats
+        ]);
+        setServices(svcs);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, []);
 
   const filtered = useMemo(() => {
     let list = services;
