@@ -4,6 +4,8 @@ from app.models.order import Order
 from app.models.order_service import OrderServices
 from app.models.delivery import Delivery
 
+from app.models import DryCleaner
+
 
 class CheckoutRepository:
 
@@ -62,3 +64,10 @@ class CheckoutRepository:
             "order_services": order.order_services,
             "delivery":       delivery,
         }
+
+    def get_dry_cleaner_by_id(self, dry_cleaner_id: int) -> DryCleaner | None:
+        return (
+            self.session.query(DryCleaner)
+            .filter(DryCleaner.id == dry_cleaner_id)
+            .first()
+        )

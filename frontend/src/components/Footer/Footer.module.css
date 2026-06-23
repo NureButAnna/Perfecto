@@ -1,5 +1,5 @@
 .footer {
-  background: #2C2C2A;
+  background: var(--teal-dark);
   color: #fff;
   font-family: 'Futura PT', 'Futura', 'Trebuchet MS', Arial, sans-serif;
 }
@@ -87,8 +87,8 @@
   transition: all 0.15s;
 }
 .socialIcons a:hover {
-  background: #D4537E;
-  border-color: #D4537E;
+  background: var(--pink);
+  border-color: var(--pink-dark)#D4537E;
 }
 
 .footerBottom {

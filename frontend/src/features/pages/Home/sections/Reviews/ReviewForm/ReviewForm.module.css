@@ -81,14 +81,14 @@
 }
 
 .activeStar {
-  color: #ff2f92;
+  color: var(--pink);
 }
 
 .inputGroup {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 0 24px 24px;
+  padding: 0 24px;
 }
 
 .inputGroup textarea {
@@ -122,7 +122,8 @@
 .cancelBtn {
   flex: 1;
   padding: 14px;
-  border: 1px solid #555;
+  border: 2px solid #555;
+  border-radius: 10px;
   background: white;
   cursor: pointer;
 }
@@ -131,10 +132,14 @@
   flex: 1;
   padding: 14px;
   border: none;
-  background: #ff2f92;
+  background: var(--pink);
   color: white;
   font-weight: 600;
   cursor: pointer;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.18s;
 }
 
 .inputGroup select {
@@ -148,5 +153,5 @@
 }
 
 .inputGroup select:focus {
-  border-color: #ff2f92;
+  border-color: var(--pink);
 }

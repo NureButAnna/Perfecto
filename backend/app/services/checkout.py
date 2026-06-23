@@ -7,9 +7,7 @@ class CheckoutService:
         self.db = db
 
     def create_checkout(self, data):
-        dry_cleaner = self.db.query(DryCleaner).filter(
-            DryCleaner.id == data.dry_cleaner_id
-        ).first()
+        dry_cleaner = self.checkout_repository.get_dry_cleaner_by_id(data.dry_cleaner_id)
 
         if not dry_cleaner:
             raise HTTPException(status_code=404, detail="Хімчистку не знайдено")

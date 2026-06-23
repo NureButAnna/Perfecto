@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "../Admin.module.css";
+import { adminApi } from "../../../../api/adminApi";
 import {
   STATUS_CYCLE,
   STATUS_LABEL,
@@ -7,15 +8,42 @@ import {
   getNextStatus,
 } from "../../../../data/orderStatus";
 
+const DELIVERY_LABEL = {
+  courier: "🚴 Кур'єр",
+  nova_poshta: "📦 Нова Пошта",
+};
 
-export default function OrderModal({ order, couriers, onClose, onAdvance, onCancel, onAssignCourier }) {
-  const [chosenCourier, setChosenCourier] = useState(order.courier_id ?? null);
+const STATUS_UA = {
+  new: "Нове",
+  accepted: "Прийнято",
+  progress: "В процесі",
+  ready: "Готово",
+  done: "Виконано",
+  cancelled: "Скасовано",
+};
+
+export default function OrderModal({ order, onClose, onAdvance, onCancel, onAssignCourier }) {
+  const [couriers, setCouriers] = useState([]);
+  const [chosenCourier, setChosenCourier] = useState(order.delivery?.user_id ?? null);
+  const [courierOpen, setCourierOpen] = useState(false);
+
+  const deliveryType = order.delivery?.delivery_type;
+  const isClosed = order.status === "done" || order.status === "cancelled";
+  const nextStatus = getNextStatus(order.status);
+  const si = STATUS_CYCLE.indexOf(order.status);
+  const needsCourier = deliveryType === "courier" && !chosenCourier &&
+    (order.status === "accepted" || order.status === "progress");
+
+  useEffect(() => {
+    if (deliveryType !== "courier" || isClosed) return;
+    adminApi.getCouriersForOrder(order.id)
+      .then((r) => setCouriers(r.data))
+      .catch(console.error);
+  }, [order.id, deliveryType, isClosed]);
 
   if (!order) return null;
 
-  const si = STATUS_CYCLE.indexOf(order.status);
-  const nextStatus = getNextStatus(order.status);
-  const needsCourier = (order.status === "accepted" || order.status === "progress") && !chosenCourier;
+  const chosenCourierObj = couriers.find((c) => c.id === chosenCourier);
 
   function handleAdvance() {
     if (needsCourier) {
@@ -25,84 +53,81 @@ export default function OrderModal({ order, couriers, onClose, onAdvance, onCanc
     onAdvance(order.id, nextStatus);
   }
 
-    function handleCourierSelect(courierId) {
-      if (!courierId) return;
-
-      const id = order.id ?? order.order_id;
-
-      if (!id) {
-        console.error("Order ID missing", order);
-        return;
-      }
-
-      setChosenCourier(courierId);
-      onAssignCourier(id, courierId);
-    }
+  function handleCourierSelect(c) {
+    setChosenCourier(c.id);
+    setCourierOpen(false);
+    onAssignCourier(order.id, c.id);
+  }
 
   function handleCancel() {
     if (!window.confirm(`Скасувати замовлення #${order.id}?`)) return;
     onCancel(order.id);
   }
 
-  const isClosed = order.status === "done" || order.status === "cancelled";
+  const clientName = order.user
+    ? `${order.user.surname ?? ""} ${order.user.name ?? ""}`.trim()
+    : "—";
+
+  const servicesList = order.order_services?.length
+    ? order.order_services.map((s) => s.service?.name ?? "—").join(", ")
+    : "—";
 
   return (
     <div className={styles.modalOverlay} onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div className={styles.modal}>
 
-        {/* ── Заголовок ── */}
         <div className={styles.modalHead}>
-          <span style={{ fontSize: 20 }}>📋</span>
-          <span className={styles.modalTitle}>
-            Замовлення #{order.id}
-          </span>
+          <span className={styles.modalTitle}>Замовлення #{order.id}</span>
           <button className={styles.iconBtn} onClick={onClose}>✕</button>
         </div>
 
-        {/* ── Тіло ── */}
         <div className={styles.modalBody}>
 
-          {/* Основні поля */}
           <div className={styles.fieldRow}>
             <div className={styles.field}>
               <span className={styles.fieldLabel}>Клієнт</span>
-              <span className={styles.fieldValue}>{order.client_name}</span>
+              <span className={styles.fieldValue}>{clientName}</span>
             </div>
             <div className={styles.field}>
               <span className={styles.fieldLabel}>Вартість</span>
               <span className={`${styles.fieldValue} ${styles.fieldValueAccent}`}>
-                ₴{order.total_price}
+                ₴{order.total_cost}
               </span>
             </div>
           </div>
 
           <div className={styles.field}>
             <span className={styles.fieldLabel}>Послуги</span>
-            <span className={styles.fieldValue}>{order.items}</span>
+            <span className={styles.fieldValue}>{servicesList}</span>
           </div>
 
-          {order.note && (
-            <div className={styles.warnBox}>
-              <span>⚠️</span>
-              <span>{order.note}</span>
-            </div>
-          )}
-
-          {/* Таймлайн статусів */}
           <div className={styles.field}>
-            <span className={styles.fieldLabel}>Прогрес виконання</span>
+            <span className={styles.fieldLabel}>Доставка</span>
+            <span className={styles.fieldValue}>
+              {DELIVERY_LABEL[deliveryType] ?? deliveryType ?? "—"}
+              {deliveryType === "courier" && order.delivery?.city && ` · ${order.delivery.city}`}
+              {deliveryType === "nova_poshta" && order.delivery?.nova_poshta_branch &&
+                ` · відділення ${order.delivery.nova_poshta_branch}`}
+            </span>
+          </div>
+
+          <div className={styles.field}>
+            <span className={styles.fieldLabel}>Статус</span>
+            <span className={styles.fieldValue}>{STATUS_UA[order.status] ?? order.status}</span>
+          </div>
+
+          <div className={styles.field}>
+            <span className={styles.fieldLabel}>Прогрес</span>
             <div className={styles.timeline}>
               {STATUS_CYCLE.map((s, i) => {
                 let stepClass = styles.timelineStepTodo;
                 let icon = STEP_ICON.todo;
-
                 if (order.status === "cancelled") {
                   if (i < si) { stepClass = styles.timelineStepDone; icon = STEP_ICON.done; }
                 } else {
-                  if (i < si)      { stepClass = styles.timelineStepDone;    icon = STEP_ICON.done;    }
-                  else if (i === si){ stepClass = styles.timelineStepCurrent; icon = STEP_ICON.current; }
+                  if (i < si)        { stepClass = styles.timelineStepDone;    icon = STEP_ICON.done;    }
+                  else if (i === si) { stepClass = styles.timelineStepCurrent; icon = STEP_ICON.current; }
                 }
-
                 return (
                   <div key={s} className={`${styles.timelineStep} ${stepClass}`}>
                     <span>{icon}</span>
@@ -119,73 +144,96 @@ export default function OrderModal({ order, couriers, onClose, onAdvance, onCanc
             </div>
           </div>
 
-          {/* Призначення кур'єра */}
-          {!isClosed && (
+          {order.comment && (
+            <div className={styles.warnBox}>
+              <span>⚠️</span>
+              <span>{order.comment}</span>
+            </div>
+          )}
+
+          {deliveryType === "courier" && !isClosed && (
             <div className={styles.field}>
-              <span className={styles.fieldLabel}>
-                {chosenCourier ? "Кур'єр призначений" : "Призначити кур'єра"}
-              </span>
-              <div className={styles.couriersGrid}>
-                {(couriers || []).filter((c) => c.is_active).map((c) => (
-                  <div
-                    key={c.courier_id}
-                    className={`${styles.courierCard} ${chosenCourier === c.courier_id ? styles.courierCardChosen : ""}`}
-                    onClick={() => handleCourierSelect(c.courier_id)}
-                  >
-                    <div className={styles.courierAvatar}>
-                      {c.first_name?.[0]}{c.last_name?.[0]}
-                    </div>
-                    <div>
-                      <div className={styles.courierName}>
-                        {c.first_name} {c.last_name}
+              <span className={styles.fieldLabel}>Призначити кур'єра</span>
+              <div className={styles.dropdownWrap}>
+                <button
+                  type="button"
+                  className={`${styles.btn} ${styles.btnGhost} ${styles.dropdownTrigger}`}
+                  onClick={() => setCourierOpen((o) => !o)}
+                >
+                  {courierOpen ? "▲" : "▼"} Оберіть кур'єра
+                </button>
+
+                {courierOpen && (
+                  <div className={styles.dropdownList}>
+                    {couriers.length === 0 && (
+                      <div className={styles.dropdownItem} style={{ color: "var(--color-muted)" }}>
+                        Немає доступних кур'єрів
                       </div>
-                      <div className={styles.courierStatus}>Вільний</div>
-                    </div>
+                    )}
+                    {couriers.map((c) => (
+                      <div
+                        key={c.id}
+                        className={`${styles.dropdownItem} ${chosenCourier === c.id ? styles.dropdownItemActive : ""}`}
+                        onClick={() => handleCourierSelect(c)}
+                      >
+                        {c.surname} {c.name}
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
             </div>
           )}
 
-          {isClosed && order.courier_name && (
+          {deliveryType === "courier" && !isClosed && chosenCourierObj && (
             <div className={styles.field}>
               <span className={styles.fieldLabel}>Кур'єр</span>
-              <span className={styles.fieldValue}>{order.courier_name}</span>
+              <span className={styles.fieldValue}>
+                {chosenCourierObj.surname} {chosenCourierObj.name}
+              </span>
+            </div>
+          )}
+
+          {isClosed && deliveryType === "courier" && chosenCourierObj && (
+            <div className={styles.field}>
+              <span className={styles.fieldLabel}>Кур'єр</span>
+              <span className={styles.fieldValue}>
+                {chosenCourierObj.surname} {chosenCourierObj.name}
+              </span>
             </div>
           )}
         </div>
 
-        {/* ── Підвал ── */}
+        {/* Підвал */}
         <div className={styles.modalFoot}>
           <button className={`${styles.btn} ${styles.btnGhost}`} onClick={onClose}>
             Закрити
           </button>
 
-          {/* Кнопки переходу статусу */}
           {order.status === "new" && (
             <button className={`${styles.btn} ${styles.btnTeal}`} onClick={handleAdvance}>
-              ✔ Прийняти замовлення
+              Прийняти
             </button>
           )}
           {order.status === "accepted" && (
             <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={handleAdvance}>
-              ▶ Розпочати виконання
+              Розпочати
             </button>
           )}
           {order.status === "progress" && (
             <button className={`${styles.btn} ${styles.btnTeal}`} onClick={handleAdvance}>
-              📦 Позначити готовим
+              Готово
             </button>
           )}
           {order.status === "ready" && (
             <button className={`${styles.btn} ${styles.btnPrimary}`} onClick={handleAdvance}>
-              ✅ Завершити
+              Завершити
             </button>
           )}
 
           {!isClosed && (
             <button className={`${styles.btn} ${styles.btnDanger}`} onClick={handleCancel}>
-              🚫 Скасувати
+              Скасувати
             </button>
           )}
         </div>

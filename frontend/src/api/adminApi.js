@@ -1,10 +1,8 @@
 import axios from "axios";
 
-const BASE = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 
 const api = axios.create({
-  baseURL: BASE,
-  headers: { "Content-Type": "application/json" },
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 api.interceptors.request.use((config) => {
@@ -29,4 +27,6 @@ export const adminApi = {
   updateUserStatus:  (userId, isActive)     => api.patch(`/admin/users/${userId}/status`, { is_active: isActive }),
   deleteUser:        (userId)               => api.delete(`/admin/users/${userId}`),
   exportData:        (type, { from, to }={})=> api.get(`/admin/export/${type}`, { params: { from, to }, responseType: "blob" }),
+  getCouriersForOrder: (orderId)            => api.get(`/admin/orders/${orderId}/couriers`),
+  getDryCleaners:      ()                   => api.get("/dry_cleaners/"),
 };

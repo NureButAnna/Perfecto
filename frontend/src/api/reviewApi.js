@@ -1,25 +1,42 @@
-const BASE_URL = "http://127.0.0.1:8000";
+import axios from "axios";
+
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_URL,
+});
 
 export async function getReviews() {
-  const res = await fetch(`${BASE_URL}/reviews/`);
-  if (!res.ok) throw new Error("Не вдалося завантажити відгуки");
-  return res.json();
+  try {
+    const res = await api.get("/reviews/");
+    return res.data;
+  } catch (error) {
+    console.error("getReviews error:", error);
+
+    throw new Error("Не вдалося завантажити відгуки", {
+      cause: error,
+    });
+  }
 }
 
 export async function submitReview(reviewData) {
   const token = localStorage.getItem("access_token");
+
   console.log("token:", token);
-
   console.log("reviewData:", reviewData);
-  const res = await fetch(`${BASE_URL}/reviews/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
-    body: JSON.stringify(reviewData),
-  });
 
-  if (!res.ok) throw new Error("Не вдалося відправити відгук");
-  return res.json();
+  try {
+    const res = await api.post("/reviews/", reviewData, {
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+
+    return res.data;
+  } catch (error) {
+    console.error("submitReview error:", error);
+
+    throw new Error("Не вдалося відправити відгук", {
+      cause: error,
+    });
+  }
 }

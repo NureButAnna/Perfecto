@@ -19,7 +19,6 @@ export default function ReviewForm({ isOpen, onClose, onSubmit }) {
       .then(data => setServices(data));
   }, []);
 
-  // Якщо не авторизований — відкриваємо глобальну LoginModal і закриваємо цю форму
   useEffect(() => {
     if (isOpen && !user) {
       onClose();

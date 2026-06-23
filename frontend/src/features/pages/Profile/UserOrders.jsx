@@ -30,7 +30,6 @@ export default function UserOrders() {
     setError("");
     try {
       const res = await ordersApi.getUserOrders(user.id);
-      // Сортуємо: нові зверху
       const sorted = [...res.data].sort(
         (a, b) => new Date(b.creation_date) - new Date(a.creation_date)
       );
@@ -81,7 +80,6 @@ export default function UserOrders() {
 
         return (
           <div key={order.id} className={`${styles.card} ${isOpen ? styles.cardOpen : ""}`}>
-            {/* ── Шапка замовлення ── */}
             <div className={styles.cardHead} onClick={() => setExpanded(isOpen ? null : order.id)}>
               <div className={styles.cardLeft}>
                 <span className={styles.orderId}>#{order.id}</span>
@@ -97,20 +95,16 @@ export default function UserOrders() {
               </div>
             </div>
 
-            {/* ── Деталі (розгортаються) ── */}
             {isOpen && (
               <div className={styles.cardBody}>
-                {/* Статус-бар */}
                 <StatusBar status={order.status} />
-
-                {/* Послуги */}
                 {order.order_services?.length > 0 && (
                   <div className={styles.section}>
                     <h4 className={styles.sectionTitle}>Послуги</h4>
                     <div className={styles.servicesList}>
                       {order.order_services.map((s, i) => (
                         <div key={i} className={styles.serviceRow}>
-                          <span>{s.service_name ?? `Послуга #${s.service_id}`}</span>
+                          <span>{s.service?.name ?? `Послуга #${s.service_id}`}</span>
                           <span className={styles.serviceQty}>
                             {s.quantity ?? s.number ?? 1} шт × ₴{s.price}
                           </span>
@@ -120,7 +114,6 @@ export default function UserOrders() {
                   </div>
                 )}
 
-                {/* Додаткова інфо */}
                 <div className={styles.section}>
                   <div className={styles.metaRow}>
                     <span className={styles.metaLabel}>Оплата</span>

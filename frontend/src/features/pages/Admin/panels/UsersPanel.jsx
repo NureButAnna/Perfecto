@@ -1,20 +1,21 @@
 import { useState, useCallback, useEffect } from "react";
 import { adminApi } from "../../../../api/adminApi";
 import {
-  Th,
-  Td,
-  Loader,
-  EmptyState,
-  BadgeGreen,
-  BadgeRed,
+  Th, Td, Loader, EmptyState, BadgeGreen, BadgeRed,
 } from "../comonents/AdminTable";
-import { isActive } from "../../../../utils/statusHelper";
 import styles from "../Admin.module.css";
 
+const STATUS_FILTERS = [
+  { key: "all",    label: "Всі" },
+  { key: "active", label: "Активні" },
+  { key: "blocked",label: "Заблоковані" },
+];
+
 export default function UsersPanel() {
-  const [users, setUsers] = useState([]);
+  const [users,   setUsers]   = useState([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
+  const [search,  setSearch]  = useState("");
+  const [filter,  setFilter]  = useState("all");
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -28,13 +29,10 @@ export default function UsersPanel() {
     }
   }, []);
 
-  useEffect(() => {
-    load();
-  }, [load]);
+  useEffect(() => { load(); }, [load]);
 
   const handleDelete = async (id) => {
     if (!window.confirm("Видалити користувача?")) return;
-
     try {
       await adminApi.deleteUser(id);
       load();
@@ -43,9 +41,9 @@ export default function UsersPanel() {
     }
   };
 
-  const handleToggleStatus = async (id, currentStatus) => {
+  const handleToggleStatus = async (u) => {
     try {
-      await adminApi.updateUserStatus(id, !isActive(currentStatus));
+      await adminApi.updateUserStatus(u.id, !u.is_active);
       load();
     } catch (e) {
       console.error(e);
@@ -54,12 +52,15 @@ export default function UsersPanel() {
 
   const filtered = users.filter((u) => {
     const q = search.toLowerCase();
-
-    return (
+    const matchSearch =
       !q ||
-      `${u.first_name} ${u.last_name}`.toLowerCase().includes(q) ||
-      (u.email || "").toLowerCase().includes(q)
-    );
+      `${u.surname} ${u.name}`.toLowerCase().includes(q) ||
+      (u.email || "").toLowerCase().includes(q);
+    const matchFilter =
+      filter === "all" ||
+      (filter === "active" && u.is_active) ||
+      (filter === "blocked" && !u.is_active);
+    return matchSearch && matchFilter;
   });
 
   if (loading) return <Loader />;
@@ -67,9 +68,7 @@ export default function UsersPanel() {
   return (
     <div>
       <div className={styles.sectionHeader} style={{ marginBottom: 14 }}>
-        <h2 className={styles.panelTitle} style={{ marginBottom: 0 }}>
-          Клієнти
-        </h2>
+        <h2 className={styles.panelTitle} style={{ marginBottom: 0 }}>Клієнти</h2>
 
         <div className={styles.searchBox}>
           <span>🔍</span>
@@ -79,6 +78,18 @@ export default function UsersPanel() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
+        </div>
+
+        <div className={styles.filterTabs}>
+          {STATUS_FILTERS.map((f) => (
+            <span
+              key={f.key}
+              className={`${styles.filterTab} ${filter === f.key ? styles.filterTabActive : ""}`}
+              onClick={() => setFilter(f.key)}
+            >
+              {f.label}
+            </span>
+          ))}
         </div>
       </div>
 
@@ -93,57 +104,41 @@ export default function UsersPanel() {
                   <Th>ID</Th>
                   <Th>Ім'я</Th>
                   <Th>Email</Th>
-                  <Th>Місто</Th>
+                  <Th>Телефон</Th>
                   <Th>Статус</Th>
                   <Th>Дії</Th>
                 </tr>
               </thead>
-
               <tbody>
                 {filtered.map((u) => (
-                  <tr key={`user-${u.user_id}`} className={styles.tr}>
-                    <Td>{u.user_id}</Td>
-
+                  <tr key={u.id} className={styles.tr}>
+                    <Td>{u.id}</Td>
                     <Td>
                       <div className={styles.clientCell}>
                         <div className={styles.clientAvatar}>
-                          {u.first_name?.[0] ?? ""}
-                          {u.last_name?.[0] ?? ""}
+                          {u.surname?.[0]}{u.name?.[0]}
                         </div>
-                        {u.first_name} {u.last_name}
+                        {u.surname} {u.name}
                       </div>
                     </Td>
-
                     <Td>{u.email}</Td>
-
-                    <Td>{u.city_id ?? "—"}</Td>
-
+                    <Td>{u.phone_number ?? "—"}</Td>
                     <Td>
-                      {isActive(u.is_active)
+                      {u.is_active
                         ? <BadgeGreen>Активний</BadgeGreen>
                         : <BadgeRed>Заблокований</BadgeRed>}
                     </Td>
-
                     <Td>
                       <div className={styles.actions}>
                         <button
-                          className={`${styles.btn} ${
-                            isActive(u.is_active)
-                              ? styles.btnWarning
-                              : styles.btnPrimary
-                          } ${styles.btnSm}`}
-                          onClick={() =>
-                            handleToggleStatus(u.user_id, u.is_active)
-                          }
+                          className={`${styles.btn} ${u.is_active ? styles.btnWarning : styles.btnPrimary} ${styles.btnSm}`}
+                          onClick={() => handleToggleStatus(u)}
                         >
-                          {isActive(u.is_active)
-                            ? "Заблокувати"
-                            : "Активувати"}
+                          {u.is_active ? "Заблокувати" : "Активувати"}
                         </button>
-
                         <button
                           className={`${styles.btn} ${styles.btnDanger} ${styles.btnSm}`}
-                          onClick={() => handleDelete(u.user_id)}
+                          onClick={() => handleDelete(u.id)}
                         >
                           Видалити
                         </button>

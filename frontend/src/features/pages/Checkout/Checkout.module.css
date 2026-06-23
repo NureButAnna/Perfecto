@@ -5,6 +5,7 @@
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 28px;
+  font-family: 'Futura PT', 'Futura', 'Trebuchet MS', Arial, sans-serif;
 }
 
 .left {
@@ -13,7 +14,6 @@
   gap: 20px;
 }
 
-/* ── Картка ── */
 .card {
   background: #fff;
   padding: 24px;
@@ -28,7 +28,6 @@
   color: #1a1a1a;
 }
 
-/* ── Select філії ── */
 .select {
   width: 100%;
   padding: 13px 14px;
@@ -44,7 +43,6 @@
 
 .select:focus { border-color: #ee2482; }
 
-/* ── Radio ── */
 .radio {
   display: flex;
   align-items: center;
@@ -56,7 +54,6 @@
 
 .radio input { accent-color: #ee2482; width: 16px; height: 16px; }
 
-/* ── Fields ── */
 .fields {
   display: flex;
   flex-direction: column;
@@ -94,7 +91,6 @@
   letter-spacing: 0.04em;
 }
 
-/* ── Textarea ── */
 .textarea {
   width: 100%;
   padding: 12px 14px;
@@ -110,7 +106,7 @@
 
 .textarea:focus { border-color: #ee2482; }
 
-/* ── Правий блок ── */
+
 .right {
   position: sticky;
   top: 100px;
@@ -170,7 +166,6 @@
   margin-bottom: 14px;
 }
 
-/* ── Кнопка ── */
 .button {
   width: 100%;
   border: none;
