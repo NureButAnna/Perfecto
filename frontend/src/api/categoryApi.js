@@ -12,6 +12,12 @@ export async function getCategories() {
   return res.json();
 }
 
+export async function getServices() {
+  const res = await fetch(`${BASE_URL}/services/`);
+  if (!res.ok) throw new Error("Failed to fetch services");
+  return res.json();
+}
+
 export async function getServicesByCategory(id) {
   const res = await fetch(`${BASE_URL}/services/category/${id}`);
   if (!res.ok) throw new Error("Failed to fetch services");
