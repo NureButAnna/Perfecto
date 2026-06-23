@@ -1,114 +1,62 @@
-// src/features/pages/Checkout/Checkout.jsx
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { useCart } from "../../../hooks/useCart";
 import { useAuth } from "../../../context/AuthContext";
 import { useAuthModal } from "../../../hooks/useAuthModal";
+import { useCheckoutForm } from "../../../hooks/useCheckoutForm";
+import { useDryCleaners } from "../../../hooks/useDryCleaners";
+import { useCheckout } from "../../../hooks/useChekout";
+
 import LoginModal from "../../../components/Auth/LoginModule";
 import RegisterModal from "../../../components/Auth/RegisterModule";
-import { checkoutApi, dryCleanersApi } from "../../../api/checkoutApi";
 import styles from "./Checkout.module.css";
 
 const PAYMENT_METHODS = [
-  { value: "card",  label: "💳 Картка" },
-  { value: "cash",  label: "💵 Готівка" },
+  { value: "card", label: "💳 Картка" },
+  { value: "cash", label: "💵 Готівка" },
 ];
 
 export default function Checkout() {
-  const { cart, totalPrice, clearCart } = useCart();
+  const { cart, totalPrice } = useCart();
   const { user } = useAuth();
-  const navigate  = useNavigate();
 
   const {
-    isLoginOpen, isRegisterOpen,
-    openLogin, closeModal,
-    switchToLogin, switchToRegister,
+    isLoginOpen,
+    isRegisterOpen,
+    openLogin,
+    closeModal,
+    switchToLogin,
+    switchToRegister,
   } = useAuthModal();
 
-  const [drycleaners, setDrycleaners] = useState([]);
-  const [loadingDC,   setLoadingDC]   = useState(true);
+  const { form, handleChange } = useCheckoutForm();
 
-  const [form, setForm] = useState({
-    dry_cleaner_id:    "",
-    payment_method:    "card",
-    delivery_type:     "courier",
-    city:              "",
-    street:            "",
-    house_number:      "",
-    flat_number:       "",
-    nova_poshta_branch: "",
-    delivery_datetime: "",
-    comment:           "",
-  });
+  const {
+    drycleaners,
+    loading: loadingDC,
+  } = useDryCleaners();
 
-  const [submitting, setSubmitting] = useState(false);
-  const [error,      setError]      = useState("");
+  const {
+    submitOrder,
+    submitting,
+    error,
+  } = useCheckout();
 
-  // Завантажити філії
-  useEffect(() => {
-    dryCleanersApi.getAll()
-      .then((res) => setDrycleaners(res.data))
-      .catch(() => {})
-      .finally(() => setLoadingDC(false));
-  }, []);
-
-  // Якщо не авторизований — показати модалку одразу
   useEffect(() => {
     if (!user) openLogin();
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  function handleChange(e) {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  }
-
   async function handleSubmit(e) {
     e.preventDefault();
-    setError("");
 
-    if (!user) { openLogin(); return; }
-    if (cart.length === 0) { setError("Кошик порожній"); return; }
-    if (!form.dry_cleaner_id) { setError("Оберіть філію"); return; }
-    if (!form.delivery_datetime) { setError("Вкажіть дату та час доставки"); return; }
-
-    const payload = {
-      user_id:        user.id,
-      dry_cleaner_id: Number(form.dry_cleaner_id),
-      payment_method: form.payment_method,
-      comment:        form.comment || null,
-
-      order_services: cart.map((item) => ({
-        service_id: item.id,
-        number:     item.quantity,
-        price:      item.price,
-      })),
-
-      delivery: {
-        user_id:            user.id,
-        order_id:           0, // бекенд підставить сам
-        delivery_type:      form.delivery_type,
-        city:               form.city,
-        street:             form.street       || null,
-        house_number:       form.house_number || null,
-        flat_number:        form.flat_number  || null,
-        nova_poshta_branch: form.delivery_type === "nova_poshta" ? form.nova_poshta_branch : null,
-        delivery_datetime:  form.delivery_datetime,
-      },
-    };
-
-    setSubmitting(true);
-    try {
-      const res = await checkoutApi.createCheckout(payload);
-      clearCart?.();
-      navigate("/profile", { state: { tab: "orders", orderId: res.data.order_id } });
-    } catch (err) {
-      const detail = err?.response?.data?.detail;
-      setError(typeof detail === "string" ? detail : "Не вдалося оформити замовлення");
-    } finally {
-      setSubmitting(false);
-    }
+    await submitOrder({
+      form,
+      cart,
+      user,
+      openLogin,
+    });
   }
 
-  const isCourier    = form.delivery_type === "courier";
+  const isCourier = form.delivery_type === "courier";
   const isNovaPoshta = form.delivery_type === "nova_poshta";
 
   return (
@@ -116,7 +64,6 @@ export default function Checkout() {
       <div className={styles.container}>
         <div className={styles.left}>
 
-          {/* ── Філія ── */}
           <div className={styles.card}>
             <h2>Філія</h2>
             {loadingDC ? (
@@ -139,7 +86,6 @@ export default function Checkout() {
             )}
           </div>
 
-          {/* ── Спосіб доставки ── */}
           <div className={styles.card}>
             <h2>Спосіб доставки</h2>
 
@@ -159,7 +105,6 @@ export default function Checkout() {
               📦 Нова Пошта
             </label>
 
-            {/* Адреса кур'єра */}
             {isCourier && (
               <div className={styles.fields}>
                 <input name="city"         placeholder="Місто *"   value={form.city}         onChange={handleChange} required />
@@ -171,7 +116,6 @@ export default function Checkout() {
               </div>
             )}
 
-            {/* Нова Пошта */}
             {isNovaPoshta && (
               <div className={styles.fields}>
                 <input name="city"               placeholder="Місто *"           value={form.city}               onChange={handleChange} required />
@@ -191,7 +135,6 @@ export default function Checkout() {
             </div>
           </div>
 
-          {/* ── Оплата ── */}
           <div className={styles.card}>
             <h2>Спосіб оплати</h2>
             {PAYMENT_METHODS.map((pm) => (
@@ -206,7 +149,6 @@ export default function Checkout() {
             ))}
           </div>
 
-          {/* ── Коментар ── */}
           <div className={styles.card}>
             <h2>Коментар</h2>
             <textarea
@@ -220,7 +162,6 @@ export default function Checkout() {
           </div>
         </div>
 
-        {/* ── Підсумок ── */}
         <div className={styles.right}>
           <div className={styles.summary}>
             <h2>Ваше замовлення</h2>
