@@ -1,27 +1,12 @@
-# Python to Linux Web App on Azure
-# Build your Python project and deploy it to Azure as a Linux Web App.
-# Change python version to one thats appropriate for your application.
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
-
 trigger:
 - main
 
 variables:
-  # Azure Resource Manager connection created during pipeline creation
   azureServiceConnectionId: 'f04a01e5-f9d8-4349-9559-669c6848cefc'
-
-  # Web app name
   webAppName: 'perfecto-backend'
-
-  # Agent VM image name
   vmImageName: 'ubuntu-latest'
-
-  # Environment name
   environmentName: 'perfecto-backend'
-
-  # Project root folder. Point to the folder containing manage.py file.
   projectRoot: $(System.DefaultWorkingDirectory)
-
   pythonVersion: '3.11'
 
 stages:
@@ -41,10 +26,9 @@ stages:
         python -m venv antenv
         source antenv/bin/activate
         python -m pip install --upgrade pip
-        pip install setup
         pip install -r backend/requirements.txt
       workingDirectory: $(projectRoot)
-      displayName: "Install requirements"
+      displayName: 'Install requirements'
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
@@ -59,9 +43,44 @@ stages:
       displayName: 'Upload package'
       artifact: drop
 
+- stage: Test
+  displayName: 'Unit Tests'
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - job: TestJob
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(pythonVersion)'
+      displayName: 'Use Python $(pythonVersion)'
+
+    - script: |
+        python -m pip install --upgrade pip
+        pip install -r backend/requirements.txt
+        pip install pytest pytest-azurepipelines
+      workingDirectory: $(projectRoot)
+      displayName: 'Install dependencies'
+
+    - script: |
+        cd backend
+        python -m pytest tests/test_services.py -v --junitxml=../test-results.xml
+      workingDirectory: $(projectRoot)
+      displayName: 'Run unit tests'
+
+    - task: PublishTestResults@2
+      displayName: 'Publish test results'
+      inputs:
+        testResultsFormat: 'JUnit'
+        testResultsFiles: 'test-results.xml'
+        failTaskOnFailedTests: true
+      condition: always()
+
 - stage: Deploy
   displayName: 'Deploy Web App'
-  dependsOn: Build
+  dependsOn: Test
   condition: succeeded()
   jobs:
   - deployment: DeploymentJob
@@ -72,7 +91,6 @@ stages:
       runOnce:
         deploy:
           steps:
-
           - task: UsePythonVersion@0
             inputs:
               versionSpec: '$(pythonVersion)'
