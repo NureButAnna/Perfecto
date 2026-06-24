@@ -99,6 +99,16 @@ stages:
       displayName: 'Install Locust'
 
     - script: |
+        echo "Current directory:"
+        pwd
+        echo "Files in root:"
+        ls -la
+        echo "Finding locustfile:"
+        find . -name "locustfile.py"
+      workingDirectory: $(projectRoot)
+      displayName: 'Debug - Find locustfile'
+
+    - script: |
         locust \
           -f backend/app/tests/locustfile.py \
           --headless \
@@ -109,21 +119,6 @@ stages:
           --csv=locust-results \
           --html=locust-report.html
       workingDirectory: $(projectRoot)
-      displayName: 'Run Load Tests'
-
-    - task: PublishPipelineArtifact@1
-      displayName: 'Upload Load Test Results'
-      inputs:
-        targetPath: '$(projectRoot)/locust-results_stats.csv'
-        artifact: 'locust-results'
-      condition: always()
-
-    - task: PublishPipelineArtifact@1
-      displayName: 'Upload Load Test Report'
-      inputs:
-        targetPath: '$(projectRoot)/locust-report.html'
-        artifact: 'locust-report'
-      condition: always()
 
 - stage: Deploy
   displayName: 'Deploy Web App'
