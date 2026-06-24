@@ -78,9 +78,56 @@ stages:
         failTaskOnFailedTests: true
       condition: always()
 
+- stage: LoadTest
+  displayName: 'Load Tests'
+  dependsOn: Test
+  condition: succeeded()
+  jobs:
+  - job: LoadTestJob
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(pythonVersion)'
+      displayName: 'Use Python $(pythonVersion)'
+
+    - script: |
+        python -m pip install --upgrade pip
+        pip install locust
+      workingDirectory: $(projectRoot)
+      displayName: 'Install Locust'
+
+    - script: |
+        locust \
+          -f backend/app/tests/locustfile.py \
+          --headless \
+          --users 20 \
+          --spawn-rate 5 \
+          --run-time 60s \
+          --host https://perfecto-backend-hdfbasgbgpgggwbp.polandcentral-01.azurewebsites.net \
+          --csv=locust-results \
+          --html=locust-report.html
+      workingDirectory: $(projectRoot)
+      displayName: 'Run Load Tests'
+
+    - task: PublishPipelineArtifact@1
+      displayName: 'Upload Load Test Results'
+      inputs:
+        targetPath: '$(projectRoot)/locust-results_stats.csv'
+        artifact: 'locust-results'
+      condition: always()
+
+    - task: PublishPipelineArtifact@1
+      displayName: 'Upload Load Test Report'
+      inputs:
+        targetPath: '$(projectRoot)/locust-report.html'
+        artifact: 'locust-report'
+      condition: always()
+
 - stage: Deploy
   displayName: 'Deploy Web App'
-  dependsOn: Test
+  dependsOn: LoadTest
   condition: succeeded()
   jobs:
   - deployment: DeploymentJob
