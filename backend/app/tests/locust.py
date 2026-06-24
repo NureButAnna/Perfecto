@@ -17,8 +17,8 @@ class AuthLoadTest(HttpUser):
 
     @task
     def login_valid(self):
-        self.client.post("/auth/login", json={
-            "email": "delivery@gmail.com",
+        self.client.post("/auth/login", data={
+            "username": "delivery@gmail.com",
             "password": "111111"
         })
 
