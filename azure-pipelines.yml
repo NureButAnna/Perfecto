@@ -110,7 +110,7 @@ stages:
 
     - script: |
         locust \
-          -f backend/app/tests/locustfile.py \
+          -f backend/app/tests/locust.py \
           --headless \
           --users 20 \
           --spawn-rate 5 \
@@ -119,6 +119,7 @@ stages:
           --csv=locust-results \
           --html=locust-report.html
       workingDirectory: $(projectRoot)
+      displayName: 'Run Load Tests'
 
 - stage: Deploy
   displayName: 'Deploy Web App'
