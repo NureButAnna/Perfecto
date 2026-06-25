@@ -24,14 +24,17 @@ stages:
 
     - script: |
         python -m pip install --upgrade pip
-        pip install -r backend/requirements.txt
+        cd backend
+        python -m venv antenv
+        source antenv/bin/activate
+        pip install -r requirements.txt
       workingDirectory: $(projectRoot)
       displayName: 'Install requirements'
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
-        rootFolderOrFile: '$(projectRoot)'
+        rootFolderOrFile: '$(projectRoot)/backend'
         includeRootFolder: false
         archiveType: zip
         archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
@@ -95,16 +98,6 @@ stages:
         pip install locust
       workingDirectory: $(projectRoot)
       displayName: 'Install Locust'
-
-    - script: |
-        echo "Current directory:"
-        pwd
-        echo "Files in root:"
-        ls -la
-        echo "Finding locustfile:"
-        find . -name "locust.py"
-      workingDirectory: $(projectRoot)
-      displayName: 'Debug - Find locustfile'
 
     - script: |
         locust \
