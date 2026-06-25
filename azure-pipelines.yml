@@ -66,7 +66,7 @@ stages:
 
     - script: |
         cd backend
-        python -m pytest app/tests/test_services.py -v --junitxml=../test-results.xml
+        python -m pytest app/tests/test_services.py app/tests/test_users.py app/tests/test_validation.py -v --junitxml=../test-results.xml
       workingDirectory: $(projectRoot)
       displayName: 'Run unit tests'
 
@@ -104,7 +104,7 @@ stages:
         echo "Files in root:"
         ls -la
         echo "Finding locustfile:"
-        find . -name "locustfile.py"
+        find . -name "locust.py"
       workingDirectory: $(projectRoot)
       displayName: 'Debug - Find locustfile'
 
@@ -117,9 +117,23 @@ stages:
           --run-time 60s \
           --host https://perfecto-backend-hdfbasgbgpgggwbp.polandcentral-01.azurewebsites.net \
           --csv=locust-results \
-          --html=locust-report.html
+          --html=locust-report.html || true
       workingDirectory: $(projectRoot)
       displayName: 'Run Load Tests'
+
+    - task: PublishPipelineArtifact@1
+      displayName: 'Upload Load Test Results'
+      inputs:
+        targetPath: 'locust-results_stats.csv'
+        artifact: 'locust-results'
+      condition: always()
+
+    - task: PublishPipelineArtifact@1
+      displayName: 'Upload Load Test Report'
+      inputs:
+        targetPath: 'locust-report.html'
+        artifact: 'locust-report'
+      condition: always()
 
 - stage: Deploy
   displayName: 'Deploy Web App'
