@@ -24,7 +24,7 @@ class AuthLoadTest(HttpUser):
 
     @task
     def login_invalid(self):
-        self.client.post("/auth/login", json={
+        self.client.post("/auth/login", data={
             "email": "wrong@gmail.com",
             "password": "wrongpassword"
         })
