@@ -1,4 +1,3 @@
-// src/features/pages/Cart/Cart.jsx
 import { Link } from "react-router-dom";
 import { useCart } from "../../../hooks/useCart";
 import styles from "./Cart.module.css";
@@ -49,6 +48,8 @@ export default function Cart() {
                     <button
                       className={styles.controlBtn}
                       onClick={() => decrease(item.id)}
+                      disabled={item.quantity === 1}
+                      title={item.quantity === 1 ? "Мінімальна кількість" : ""}
                     >
                       −
                     </button>

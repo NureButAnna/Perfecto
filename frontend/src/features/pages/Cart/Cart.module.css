@@ -172,6 +172,11 @@
 
 .controlBtn:hover { background: #fdf0f5; }
 
+.controlBtn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 .quantity {
   min-width: 36px;
   text-align: center;
