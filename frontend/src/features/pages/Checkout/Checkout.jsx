@@ -1,10 +1,11 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "../../../hooks/useCart";
 import { useAuth } from "../../../context/AuthContext";
 import { useAuthModal } from "../../../hooks/useAuthModal";
 import { useCheckoutForm } from "../../../hooks/useCheckoutForm";
 import { useDryCleaners } from "../../../hooks/useDryCleaners";
 import { useCheckout } from "../../../hooks/useChekout";
+import { validateDeliveryDate } from "../../../utils/validateDeliveryDate";
 
 import LoginModal from "../../../components/Auth/LoginModule";
 import RegisterModal from "../../../components/Auth/RegisterModule";
@@ -41,6 +42,8 @@ export default function Checkout() {
     error,
   } = useCheckout();
 
+  const [datetimeError, setDatetimeError] = useState("");
+
   useEffect(() => {
     if (!user) openLogin();
   }, [user]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -56,8 +59,20 @@ export default function Checkout() {
     });
   }
 
+  const handleDateTimeChange = (e) => {
+    const error = validateDeliveryDate(e.target.value);
+    setDatetimeError(error);
+    if (!error) {
+      handleChange(e);
+    }
+  };
+
   const isCourier = form.delivery_type === "courier";
   const isNovaPoshta = form.delivery_type === "nova_poshta";
+
+  const minDate = new Date();
+  minDate.setHours(minDate.getHours() + 2);
+  const todayStr = minDate.toISOString().slice(0, 16);
 
   return (
     <>
@@ -118,20 +133,28 @@ export default function Checkout() {
 
             {isNovaPoshta && (
               <div className={styles.fields}>
-                <input name="city"               placeholder="Місто *"           value={form.city}               onChange={handleChange} required />
-                <input name="nova_poshta_branch" placeholder="Відділення НП *"   value={form.nova_poshta_branch} onChange={handleChange} required />
+                <input name="city"               placeholder="Місто *"         value={form.city}               onChange={handleChange} required />
+                <input name="nova_poshta_branch" placeholder="Відділення НП *" value={form.nova_poshta_branch} onChange={handleChange} required />
               </div>
             )}
 
             <div className={styles.fields} style={{ marginTop: 12 }}>
-              <label className={styles.fieldLabel}>Дата та час доставки *</label>
+              <label className={styles.fieldLabel}>
+                Дата та час доставки *
+              </label>
               <input
                 type="datetime-local"
                 name="delivery_datetime"
-                value={form.delivery_datetime}
-                onChange={handleChange}
+                min={todayStr}
+                value={form.delivery_datetime || ""}
+                onChange={handleDateTimeChange}
                 required
               />
+              {datetimeError && (
+                <p style={{ color: "#ff4d4f", fontSize: "14px", marginTop: "5px" }}>
+                  {datetimeError}
+                </p>
+              )}
             </div>
           </div>
 
@@ -160,6 +183,7 @@ export default function Checkout() {
               className={styles.textarea}
             />
           </div>
+
         </div>
 
         <div className={styles.right}>
@@ -203,6 +227,7 @@ export default function Checkout() {
             )}
           </div>
         </div>
+
       </div>
 
       <LoginModal
