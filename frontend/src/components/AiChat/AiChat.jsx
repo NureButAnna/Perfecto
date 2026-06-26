@@ -1,13 +1,23 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./AiChat.module.css";
 import { MessageIcon } from "../../utils/icons";
-import { SYSTEM_PROMPT, WELCOME_MESSAGE } from "../../config/aiChatConfig";
+import { WELCOME_MESSAGE } from "../../config/aiChatConfig";
+import { useAuth } from "../../context/AuthContext";
 
-const AZURE_ENDPOINT  = import.meta.env.VITE_AZURE_OPENAI_ENDPOINT;
-const AZURE_API_KEY   = import.meta.env.VITE_AZURE_OPENAI_KEY;
-const DEPLOYMENT_NAME = import.meta.env.VITE_AZURE_OPENAI_DEPLOYMENT;
+const BACKEND = import.meta.env.VITE_API_URL;
+
+function getSessionId() {
+  let sid = sessionStorage.getItem("chat_session_id");
+  if (!sid) {
+    sid = crypto.randomUUID();
+    sessionStorage.setItem("chat_session_id", sid);
+  }
+  return sid;
+}
 
 export default function AiChat() {
+  const { user } = useAuth();
+
   const [isOpen,   setIsOpen]   = useState(false);
   const [messages, setMessages] = useState([
     { role: "assistant", text: WELCOME_MESSAGE }
@@ -20,60 +30,62 @@ export default function AiChat() {
     if (isOpen) bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isOpen]);
 
+  // Якщо юзер щойно залогінився — прив'язуємо гостьову сесію до акаунту
+  useEffect(() => {
+    if (!user) return;
+    const sid = sessionStorage.getItem("chat_session_id");
+    if (!sid) return;
+
+    const formData = new FormData();
+    formData.append("client_id", user.id);
+
+    fetch(`${BACKEND}/ai-chats/attach-session`, {
+      method: "POST",
+      headers: { "X-Session-ID": sid },
+      body: formData,
+    }).catch(console.error);
+  }, [user]);
+
   const sendMessage = async () => {
     const text = input.trim();
     if (!text || loading) return;
 
-    const userMsg = { role: "user", text };
-    setMessages(prev => [...prev, userMsg]);
+    setMessages(prev => [...prev, { role: "user", text }]);
     setInput("");
     setLoading(true);
 
     try {
-      const history = [...messages, userMsg].map(m => ({
-        role: m.role === "assistant" ? "assistant" : "user",
-        content: m.text,
-      }));
+      const formData = new FormData();
+      formData.append("message", text);
 
-      const res = await fetch(
-        `${AZURE_ENDPOINT}/openai/deployments/${DEPLOYMENT_NAME}/chat/completions?api-version=2024-02-01`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "api-key": AZURE_API_KEY,
-          },
-          body: JSON.stringify({
-            messages: [
-              { role: "system", content: SYSTEM_PROMPT },
-              ...history,
-            ],
-            max_tokens: 1000,
-            temperature: 0.7,
-          }),
-        }
-      );
+      // Якщо є авторизований юзер — передаємо client_id, інакше session_id
+      const headers = {};
+      if (user?.id) {
+        formData.append("client_id", user.id);
+      } else {
+        headers["X-Session-ID"] = getSessionId();
+      }
+
+      const res = await fetch(`${BACKEND}/ai-chats/continue`, {
+        method: "POST",
+        headers,
+        body: formData,
+      });
 
       if (!res.ok) {
         const err = await res.json();
-        console.error("Azure OpenAI error:", err);
-        throw new Error(err.error?.message ?? "Помилка запиту");
+        throw new Error(err.detail ?? "Помилка запиту");
       }
 
       const data = await res.json();
-      const reply = data.choices?.[0]?.message?.content
-        ?? "Вибачте, не вдалося отримати відповідь. Зверніться до адміністратора.";
-
+      const reply = data.answer ?? "Вибачте, не вдалося отримати відповідь.";
       setMessages(prev => [...prev, { role: "assistant", text: reply }]);
 
     } catch (e) {
       console.error(e);
       setMessages(prev => [
         ...prev,
-        {
-          role: "assistant",
-          text: "Виникла помилка зв'язку 😔\nБудь ласка, зверніться до адміністратора або спробуйте пізніше.",
-        },
+        { role: "assistant", text: "Виникла помилка 😔 Спробуйте ще раз або зверніться до адміністратора." }
       ]);
     } finally {
       setLoading(false);
@@ -115,9 +127,8 @@ export default function AiChat() {
                   <div className={styles.msgAvatar}>✦</div>
                 )}
                 <div className={styles.msgBubble}>
-                  {/* Підтримка переносів рядка у повідомленнях */}
-                  {msg.text.split("\n").map((line, j) => (
-                    <span key={j}>{line}{j < msg.text.split("\n").length - 1 && <br />}</span>
+                  {msg.text.split("\n").map((line, j, arr) => (
+                    <span key={j}>{line}{j < arr.length - 1 && <br />}</span>
                   ))}
                 </div>
               </div>
