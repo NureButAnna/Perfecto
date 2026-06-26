@@ -1,5 +1,3 @@
-// src/config/aiChatConfig.js
-
 export const CHAT_CONFIG = {
   // Контакти для fallback-відповідей
   adminPhone: "+38 (050) 678 99 00",
