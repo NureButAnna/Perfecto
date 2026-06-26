@@ -1,19 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 import styles from "./AiChat.module.css";
-import { MessageIcon }  from "../../utils/icons"
+import { MessageIcon } from "../../utils/icons";
+import { SYSTEM_PROMPT, WELCOME_MESSAGE } from "../../config/aiChatConfig";
 
-const SYSTEM_PROMPT = `Ти — ввічливий ШІ-консультант хімчистки Perfecto. 
-Допомагаєш клієнтам з питаннями про послуги, ціни, доставку та догляд за одягом. 
-Відповідай коротко, по суті, українською мовою. 
-Якщо питання не стосується хімчистки чи одягу — ввічливо поверни розмову до теми.`;
+const AZURE_ENDPOINT  = import.meta.env.VITE_AZURE_OPENAI_ENDPOINT;
+const AZURE_API_KEY   = import.meta.env.VITE_AZURE_OPENAI_KEY;
+const DEPLOYMENT_NAME = import.meta.env.VITE_AZURE_OPENAI_DEPLOYMENT;
 
 export default function AiChat() {
   const [isOpen,   setIsOpen]   = useState(false);
   const [messages, setMessages] = useState([
-    { role: "assistant", text: "Привіт! Я ШІ-консультант Perfecto 👋 Чим можу допомогти?" }
+    { role: "assistant", text: WELCOME_MESSAGE }
   ]);
-  const [input,    setInput]    = useState("");
-  const [loading,  setLoading]  = useState(false);
+  const [input,   setInput]   = useState("");
+  const [loading, setLoading] = useState(false);
   const bottomRef = useRef(null);
 
   useEffect(() => {
@@ -35,22 +35,46 @@ export default function AiChat() {
         content: m.text,
       }));
 
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-6",
-          max_tokens: 1000,
-          system: SYSTEM_PROMPT,
-          messages: history,
-        }),
-      });
+      const res = await fetch(
+        `${AZURE_ENDPOINT}/openai/deployments/${DEPLOYMENT_NAME}/chat/completions?api-version=2024-02-01`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "api-key": AZURE_API_KEY,
+          },
+          body: JSON.stringify({
+            messages: [
+              { role: "system", content: SYSTEM_PROMPT },
+              ...history,
+            ],
+            max_tokens: 1000,
+            temperature: 0.7,
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        const err = await res.json();
+        console.error("Azure OpenAI error:", err);
+        throw new Error(err.error?.message ?? "Помилка запиту");
+      }
 
       const data = await res.json();
-      const reply = data.content?.[0]?.text ?? "Вибачте, не вдалося отримати відповідь.";
+      const reply = data.choices?.[0]?.message?.content
+        ?? "Вибачте, не вдалося отримати відповідь. Зверніться до адміністратора.";
+
       setMessages(prev => [...prev, { role: "assistant", text: reply }]);
-    } catch {
-      setMessages(prev => [...prev, { role: "assistant", text: "Виникла помилка. Спробуйте ще раз." }]);
+
+    } catch (e) {
+      console.error(e);
+      setMessages(prev => [
+        ...prev,
+        {
+          role: "assistant",
+          text: "Виникла помилка зв'язку 😔\nБудь ласка, зверніться до адміністратора або спробуйте пізніше.",
+        },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -65,7 +89,6 @@ export default function AiChat() {
 
   return (
     <div className={styles.wrapper}>
-      {/* Чат-вікно */}
       {isOpen && (
         <div className={styles.chat}>
           <div className={styles.header}>
@@ -91,7 +114,12 @@ export default function AiChat() {
                 {msg.role === "assistant" && (
                   <div className={styles.msgAvatar}>✦</div>
                 )}
-                <div className={styles.msgBubble}>{msg.text}</div>
+                <div className={styles.msgBubble}>
+                  {/* Підтримка переносів рядка у повідомленнях */}
+                  {msg.text.split("\n").map((line, j) => (
+                    <span key={j}>{line}{j < msg.text.split("\n").length - 1 && <br />}</span>
+                  ))}
+                </div>
               </div>
             ))}
             {loading && (
@@ -125,7 +153,6 @@ export default function AiChat() {
         </div>
       )}
 
-      {/* Кнопка відкриття */}
       <button
         className={`${styles.fab} ${isOpen ? styles.fabOpen : ""}`}
         onClick={() => setIsOpen(v => !v)}
